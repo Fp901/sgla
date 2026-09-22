@@ -11,6 +11,17 @@ export const site = {
    */
   email: 'francois@sgla.co.uk',
   location: 'Bury St Edmunds, Suffolk',
+  /**
+   * Registered company. Used for structured data only. The registered office
+   * address is deliberately not published here: it is on the public register,
+   * but it does not need repeating on the website.
+   */
+  company: {
+    legalName: 'SGLA LTD',
+    number: '16758759',
+    incorporated: '2025-10-02',
+    url: 'https://find-and-update.company-information.service.gov.uk/company/16758759',
+  },
   founder: 'François Pretorius',
   /** Primary conversion action. Used for every main CTA. */
   cta: {

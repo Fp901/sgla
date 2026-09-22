@@ -7,8 +7,18 @@ export const organisation = {
   '@type': 'ProfessionalService',
   '@id': `${site.url}/#organisation`,
   name: site.name,
+  legalName: site.company.legalName,
   url: site.url,
   description: site.description,
+  foundingDate: site.company.incorporated,
+  // Links the site to the public register, so the business can be verified
+  // as a real registered entity rather than an unattributed page.
+  sameAs: [site.company.url],
+  identifier: {
+    '@type': 'PropertyValue',
+    propertyID: 'Companies House company number',
+    value: site.company.number,
+  },
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Bury St Edmunds',
