@@ -7,7 +7,7 @@ export const site = {
     'Fast, modern websites for independent businesses. Custom-built, performance-focused websites that you actually own.',
   email: 'francois@sgla.co.uk',
   location: 'Bury St Edmunds, Suffolk',
-  founder: 'François',
+  founder: 'François Pretorius',
   /** Primary conversion action. Used for every main CTA. */
   cta: {
     label: 'Show me your website',

@@ -17,6 +17,12 @@ export const organisation = {
     addressCountry: 'GB',
   },
   areaServed: { '@type': 'Country', name: 'United Kingdom' },
+  founder: {
+    '@type': 'Person',
+    name: site.founder,
+    jobTitle: 'Web developer',
+    alumniOf: { '@type': 'CollegeOrUniversity', name: 'University of Suffolk' },
+  },
   knowsAbout: ['Web design', 'Web development', 'Website rebuilds', 'Website performance'],
 };
 
