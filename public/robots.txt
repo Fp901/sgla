@@ -1,6 +1,54 @@
+# SGLA - https://sgla.co.uk
+# Search and AI crawlers are welcome. Named explicitly rather than relying on
+# the wildcard, because several of these bots look for their own directive and
+# some platforms block them by default.
+
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /thanks
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google (Gemini / AI Overviews)
+User-agent: Google-Extended
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl, which feeds many open models
+User-agent: CCBot
+Allow: /
+
+# Microsoft Copilot
+User-agent: msnbot-media
+Allow: /
 
 Sitemap: https://sgla.co.uk/sitemap-index.xml
