@@ -80,8 +80,8 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       throw new Error('Zoho CRM credentials are not configured');
     }
 
-    const outcome = await createLead(values);
-    console.info(`[contact] lead ${outcome} for ${values.business}`);
+    const { result, id } = await createLead(values);
+    console.info(`[contact] lead ${result}${id ? ` (${id})` : ''} for ${values.business}`);
   } catch (error) {
     console.error('[contact] submission failed:', error);
     return wantsJson

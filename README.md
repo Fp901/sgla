@@ -169,9 +169,11 @@ lead so the rule fires.
 and `ZOHO_API_DOMAIN` together (for example `https://accounts.zoho.com` and
 `https://www.zohoapis.com`). A mismatch is the usual cause of `INVALID_TOKEN` errors.
 
-**Repeat enquiries.** If someone enquires twice from the same address, Zoho's duplicate check
-rejects the second lead. The site handles this by attaching the new message as a **Note** on the
-existing lead, so nothing is lost.
+**Repeat enquiries.** By default Zoho allows several leads with the same email address, so a
+second enquiry simply creates a second lead. If you later switch on duplicate checking for Leads
+(Setup, Data Administration, Duplicate Check), Zoho starts rejecting those instead; the site
+handles that by attaching the message as a **Note** on the existing lead rather than failing, so
+an enquiry is never lost either way.
 
 ### After the first deploy, check
 

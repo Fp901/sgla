@@ -109,8 +109,11 @@ async function addNoteToLead(leadId: string, values: ContactPayload, token: stri
   }
 }
 
-/** Creates the Lead. Returns how it was recorded, for logging. */
-export async function createLead(values: ContactPayload): Promise<'created' | 'noted'> {
+/** How the enquiry was recorded, with the CRM record id for tracing. */
+export type LeadOutcome = { result: 'created' | 'noted'; id?: string };
+
+/** Creates the Lead, or notes it against an existing one if it is a duplicate. */
+export async function createLead(values: ContactPayload): Promise<LeadOutcome> {
   const token = await getAccessToken();
   const { first, last } = splitName(values.name);
 
@@ -132,13 +135,13 @@ export async function createLead(values: ContactPayload): Promise<'created' | 'n
   const body = await response.json().catch(() => ({}));
   const result = firstResult(body);
 
-  if (result.code === 'SUCCESS') return 'created';
+  if (result.code === 'SUCCESS') return { result: 'created', id: result.details?.id };
 
   // Repeat enquiry from an address already in the CRM: attach it to that lead.
   const duplicateId = result.details?.duplicate_record?.id;
   if (result.code === 'DUPLICATE_DATA' && duplicateId) {
     await addNoteToLead(duplicateId, values, token);
-    return 'noted';
+    return { result: 'noted', id: duplicateId };
   }
 
   throw new Error(
