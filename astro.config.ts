@@ -34,16 +34,21 @@ export default defineConfig({
   },
   env: {
     schema: {
-      RESEND_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
-      CONTACT_TO_EMAIL: envField.string({
+      // Zoho CRM (server-only). Without these the contact endpoint refuses to
+      // send and tells the visitor to email directly, rather than failing silently.
+      ZOHO_CLIENT_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
+      ZOHO_CLIENT_SECRET: envField.string({ context: 'server', access: 'secret', optional: true }),
+      ZOHO_REFRESH_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
+      // Data centre. UK/EU accounts use the .eu domains; change both if yours differ.
+      ZOHO_ACCOUNTS_DOMAIN: envField.string({
         context: 'server',
         access: 'secret',
-        default: 'francois@sgla.co.uk',
+        default: 'https://accounts.zoho.eu',
       }),
-      CONTACT_FROM_EMAIL: envField.string({
+      ZOHO_API_DOMAIN: envField.string({
         context: 'server',
         access: 'secret',
-        default: 'SGLA Website <onboarding@resend.dev>',
+        default: 'https://www.zohoapis.eu',
       }),
     },
   },

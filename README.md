@@ -14,7 +14,7 @@ Marketing website for SGLA. Astro 7, TypeScript, plain CSS, deployed on Vercel.
 | Colour | Navy ramp generated from `#002966` | Tailwind-style 50, 950 steps, built in OKLCH so the steps are perceptually even |
 | Fonts | Inter via Astro's Fonts API | Downloaded at build, self-hosted, subset to latin, preloaded |
 | Images | `astro:assets` + sharp | Responsive `srcset`, WebP, dimensions set (no layout shift) |
-| Form email | [Resend](https://resend.com) via `fetch` | No SDK dependency; API key stays server-side |
+| Form handling | Zoho CRM REST API via `fetch` | No SDK dependency; creates a Lead, secrets stay server-side |
 | Analytics | Vercel Web Analytics | Cookieless; one script, production only |
 | Hosting | Vercel | Git-connected: `main` → production, other branches → previews |
 
@@ -25,7 +25,7 @@ which is why `@astrojs/vercel` is installed.
 
 ```bash
 npm install
-cp .env.example .env     # optional: without RESEND_API_KEY, submissions are logged to the console
+cp .env.example .env     # optional: without Zoho credentials, submissions are logged to the console
 npm run dev              # http://localhost:4321
 ```
 
@@ -92,11 +92,16 @@ better.
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `RESEND_API_KEY` | Yes (production) | Sends contact form submissions. Without it, production submissions fail gracefully with a "please email directly" message; dev logs them instead. |
-| `CONTACT_TO_EMAIL` | No | Where submissions go. Default `francois@sgla.co.uk`. |
-| `CONTACT_FROM_EMAIL` | No | Sender. Default `SGLA Website <onboarding@resend.dev>` (Resend's test sender). Change to an address on a verified domain, e.g. `SGLA Website <hello@sgla.co.uk>`. |
+| `ZOHO_CLIENT_ID` | Yes (production) | Self Client ID from the Zoho API Console. |
+| `ZOHO_CLIENT_SECRET` | Yes (production) | Self Client secret. |
+| `ZOHO_REFRESH_TOKEN` | Yes (production) | Long-lived refresh token; access tokens are minted from it and cached in memory. |
+| `ZOHO_ACCOUNTS_DOMAIN` | No | OAuth domain. Defaults to `https://accounts.zoho.eu` (UK/EU accounts). |
+| `ZOHO_API_DOMAIN` | No | API domain. Defaults to `https://www.zohoapis.eu`. Must match the accounts domain. |
 
-All three are server-only (`astro:env/server`) and never reach the browser.
+Without the three credentials, production submissions fail gracefully with a "please email
+directly" message; local development logs them to the console instead.
+
+All of these are server-only (`astro:env/server`) and never reach the browser.
 
 ## Contact form
 
@@ -113,7 +118,7 @@ If spam becomes a problem, the next step is Cloudflare Turnstile (verify the tok
 
 1. Push this repository to GitHub.
 2. In Vercel: **Add New → Project → Import** the repo. Framework preset is detected as Astro; no build settings need changing.
-3. **Environment variables** (Settings → Environment Variables): add `RESEND_API_KEY` for Production (and Preview if you want previews to send real email). Optionally `CONTACT_FROM_EMAIL`.
+3. **Environment variables** (Settings → Environment Variables): add `ZOHO_CLIENT_ID`, `ZOHO_CLIENT_SECRET` and `ZOHO_REFRESH_TOKEN` for Production (and Preview if you want preview deploys to write real leads).
 4. Deploy. Pushes to `main` go to production; every other branch/PR gets a preview URL.
 5. **Analytics**: Project → Analytics → Enable. The script is already in the layout.
 
@@ -123,18 +128,55 @@ If spam becomes a problem, the next step is Cloudflare Turnstile (verify the tok
 - Recommended: make `sgla.co.uk` the primary and set `www` to redirect to it (Vercel does this when you mark one as the redirect target). `astro.config.ts` has `site: 'https://sgla.co.uk'`, so canonicals and the sitemap already use the apex.
 - Point DNS at Vercel as instructed in that screen (A record `76.76.21.21` for the apex, CNAME `cname.vercel-dns.com` for `www`, or use Vercel nameservers). HTTPS is automatic.
 
-### Email sending (Resend)
+### Zoho CRM setup
 
-1. Create a Resend account and an API key → `RESEND_API_KEY`.
-2. Add and verify `sgla.co.uk` in Resend (SPF/DKIM DNS records).
-3. Set `CONTACT_FROM_EMAIL` to an address on that domain.
-4. Submit the live form once and confirm it lands in `francois@sgla.co.uk`.
+Submissions are created as **Leads** in Zoho CRM. Notification email is handled by a CRM
+workflow rule rather than a separate email service, so there is no second vendor to configure.
+
+**1. Create a Self Client** at [api-console.zoho.eu](https://api-console.zoho.eu) (use
+`.eu` for a UK/EU Zoho account, `.com` for US). Choose **Self Client** → Create. Note the
+**Client ID** and **Client Secret**.
+
+**2. Generate a grant token.** On the Self Client's *Generate Code* tab enter:
+
+- Scope: `ZohoCRM.modules.leads.CREATE,ZohoCRM.modules.notes.CREATE`
+- Time duration: 10 minutes
+- Scope description: anything
+
+Copy the generated code. It expires quickly, so do step 3 straight away.
+
+**3. Exchange it for a refresh token** (run within the 10 minutes):
+
+```bash
+curl -X POST https://accounts.zoho.eu/oauth/v2/token \
+  -d grant_type=authorization_code \
+  -d client_id=YOUR_CLIENT_ID \
+  -d client_secret=YOUR_CLIENT_SECRET \
+  -d code=GENERATED_CODE
+```
+
+The response contains `refresh_token`. That value is long-lived: put it in `ZOHO_REFRESH_TOKEN`.
+The access token in the same response is short-lived and is not needed, since the site mints its
+own from the refresh token and caches it.
+
+**4. Set up the notification email** in Zoho CRM: *Setup → Automation → Workflow Rules → Create
+Rule*, module **Leads**, execute on **Create**, condition `Lead Source is Web Form`, action
+**Email Notification** to `francois@sgla.co.uk`. The site sends `trigger: ["workflow"]` with each
+lead so the rule fires.
+
+**5. Data centre.** If your Zoho account is not on the EU data centre, set `ZOHO_ACCOUNTS_DOMAIN`
+and `ZOHO_API_DOMAIN` together (for example `https://accounts.zoho.com` and
+`https://www.zohoapis.com`). A mismatch is the usual cause of `INVALID_TOKEN` errors.
+
+**Repeat enquiries.** If someone enquires twice from the same address, Zoho's duplicate check
+rejects the second lead. The site handles this by attaching the new message as a **Note** on the
+existing lead, so nothing is lost.
 
 ### After the first deploy, check
 
 - `curl -I https://sgla.co.uk` shows the security headers from `vercel.json`.
 - `https://sgla.co.uk/sitemap-index.xml` and `/robots.txt` resolve.
-- A test form submission arrives.
+- A test form submission appears as a Lead in Zoho CRM and the workflow email arrives.
 - Share the URL in Slack/WhatsApp to confirm the OG image renders.
 
 ## Known notes

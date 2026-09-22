@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { CONTACT_FROM_EMAIL, CONTACT_TO_EMAIL, RESEND_API_KEY } from 'astro:env/server';
-import { normaliseWebsite, validateContact, type ContactPayload } from '@lib/contact';
+import { validateContact } from '@lib/contact';
+import { createLead, zohoConfigured } from '@lib/zoho';
 
 /** The one route on the site that runs on-demand. Everything else is static. */
 export const prerender = false;
@@ -21,8 +21,6 @@ const escapeHtml = (value: string) =>
     (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!,
   );
 
-const stripLineBreaks = (value: string) => value.replace(/[\r\n]+/g, ' ');
-
 async function readBody(request: Request): Promise<Record<string, unknown>> {
   const type = request.headers.get('content-type') ?? '';
   if (type.includes('application/json')) {
@@ -32,65 +30,6 @@ async function readBody(request: Request): Promise<Record<string, unknown>> {
   }
   const data = await request.formData();
   return Object.fromEntries(data.entries());
-}
-
-function buildEmail(values: ContactPayload) {
-  const website = normaliseWebsite(values.website);
-  const subject = `Website review: ${stripLineBreaks(values.business)}`;
-
-  const text = [
-    `Name: ${values.name}`,
-    `Business: ${values.business}`,
-    `Email: ${values.email}`,
-    `Website: ${website}`,
-    '',
-    "What isn't working:",
-    values.message,
-  ].join('\n');
-
-  const html = `
-    <p><strong>Name:</strong> ${escapeHtml(values.name)}</p>
-    <p><strong>Business:</strong> ${escapeHtml(values.business)}</p>
-    <p><strong>Email:</strong> <a href="mailto:${escapeHtml(values.email)}">${escapeHtml(values.email)}</a></p>
-    <p><strong>Website:</strong> <a href="${escapeHtml(website)}">${escapeHtml(website)}</a></p>
-    <p><strong>What isn't working:</strong></p>
-    <p>${escapeHtml(values.message).replace(/\n/g, '<br>')}</p>
-  `;
-
-  return { subject, text, html };
-}
-
-async function sendEmail(values: ContactPayload): Promise<void> {
-  const { subject, text, html } = buildEmail(values);
-
-  if (!RESEND_API_KEY) {
-    if (import.meta.env.DEV) {
-      console.info('[contact] RESEND_API_KEY not set, submission logged instead:\n' + text);
-      return;
-    }
-    throw new Error('RESEND_API_KEY is not configured');
-  }
-
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: CONTACT_FROM_EMAIL,
-      to: [CONTACT_TO_EMAIL],
-      reply_to: values.email,
-      subject,
-      text,
-      html,
-    }),
-  });
-
-  if (!response.ok) {
-    const detail = await response.text().catch(() => '');
-    throw new Error(`Resend responded ${response.status}: ${detail.slice(0, 300)}`);
-  }
 }
 
 export const POST: APIRoute = async ({ request, redirect }) => {
@@ -128,9 +67,23 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   }
 
   try {
-    await sendEmail(values);
+    if (!zohoConfigured) {
+      // Local development without credentials: log rather than lose the submission.
+      if (import.meta.env.DEV) {
+        console.info(
+          '[contact] Zoho not configured, submission logged instead:\n' +
+            `Name: ${values.name}\nBusiness: ${values.business}\nEmail: ${values.email}\n` +
+            `Website: ${values.website}\n\n${values.message}`,
+        );
+        return wantsJson ? json({ ok: true }) : redirect('/thanks', 303);
+      }
+      throw new Error('Zoho CRM credentials are not configured');
+    }
+
+    const outcome = await createLead(values);
+    console.info(`[contact] lead ${outcome} for ${values.business}`);
   } catch (error) {
-    console.error('[contact] send failed:', error);
+    console.error('[contact] submission failed:', error);
     return wantsJson
       ? json({ ok: false, message: 'Could not send your message.' }, 502)
       : new Response('Sorry, that didn’t send. Please email francois@sgla.co.uk directly.', {
