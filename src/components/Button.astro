@@ -1,0 +1,149 @@
+---
+/**
+ * Renders an <a> when `href` is given, otherwise a <button>.
+ * `event` adds a data attribute used by the analytics click tracker in Header.
+ */
+import type { HTMLAttributes } from 'astro/types';
+import Arrow from './Arrow.astro';
+
+type Variant = 'primary' | 'secondary' | 'ghost';
+type Size = 'md' | 'lg';
+
+interface BaseProps {
+  variant?: Variant;
+  size?: Size;
+  /** Show a trailing arrow. 'right' for links, 'down' for in-page anchors. */
+  arrow?: 'right' | 'down' | 'none';
+  event?: string;
+  class?: string;
+}
+
+type LinkProps = BaseProps & { href: string } & Omit<HTMLAttributes<'a'>, 'class'>;
+type ButtonProps = BaseProps & { href?: undefined } & Omit<HTMLAttributes<'button'>, 'class'>;
+
+type Props = LinkProps | ButtonProps;
+
+const {
+  variant = 'primary',
+  size = 'md',
+  arrow = 'right',
+  event,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const classes = ['button', `button--${variant}`, `button--${size}`, className];
+---
+
+{rest.href ? (
+  <a class:list={classes} data-event={event} {...(rest as LinkProps)}>
+    <span class="button__label">
+      <slot />
+    </span>
+    {arrow !== 'none' && <Arrow direction={arrow} />}
+  </a>
+) : (
+  <button class:list={classes} data-event={event} {...{ type: 'button', ...(rest as ButtonProps) }}>
+    <span class="button__label">
+      <slot />
+    </span>
+    {arrow !== 'none' && <Arrow direction={arrow} />}
+  </button>
+)}
+
+<style>
+  .button {
+    --_bg: var(--color-ink);
+    --_fg: var(--color-on-ink);
+    --_border: var(--color-ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    min-height: 3rem;
+    padding: 0.75rem 1.4rem;
+    border-radius: var(--radius-pill);
+    background: var(--_bg);
+    color: var(--_fg);
+    border: 1px solid var(--_border);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color var(--duration-fast) ease,
+      color var(--duration-fast) ease,
+      border-color var(--duration-fast) ease,
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .button--lg {
+    min-height: 3.5rem;
+    padding: 0.95rem 1.75rem;
+    font-size: 1.0625rem;
+  }
+
+  .button--primary:hover {
+    --_bg: var(--color-accent);
+    --_border: var(--color-accent);
+    --_fg: #fff;
+  }
+
+  .button--secondary {
+    --_bg: transparent;
+    --_fg: var(--color-text);
+    --_border: var(--color-border-strong);
+  }
+
+  .button--secondary:hover {
+    --_border: var(--color-text);
+  }
+
+  .button--ghost {
+    --_bg: transparent;
+    --_fg: var(--color-text);
+    --_border: transparent;
+    padding-inline: 0.25rem;
+    min-height: 2.5rem;
+  }
+
+  .button--ghost:hover {
+    --_fg: var(--color-accent);
+  }
+
+  .button:active {
+    transform: translateY(1px);
+  }
+
+  .button :global(.button__arrow) {
+    flex: none;
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+
+  .button :global(.button__arrow--down) {
+    transform: rotate(90deg);
+  }
+
+  .button:hover :global(.button__arrow--right) {
+    transform: translateX(3px);
+  }
+
+  .button:hover :global(.button__arrow--down) {
+    transform: rotate(90deg) translateX(3px);
+  }
+
+  /* Dark sections: swap the primary fill so it stays high-contrast. */
+  :global(.theme-dark) .button--primary {
+    --_bg: var(--color-on-ink);
+    --_fg: var(--color-ink);
+    --_border: var(--color-on-ink);
+  }
+
+  :global(.theme-dark) .button--primary:hover {
+    --_bg: var(--color-accent);
+    --_border: var(--color-accent);
+    --_fg: #fff;
+  }
+</style>

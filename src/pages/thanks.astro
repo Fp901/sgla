@@ -1,0 +1,21 @@
+---
+/** No-JavaScript success page for the contact form. */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageIntro from '@components/PageIntro.astro';
+import Button from '@components/Button.astro';
+import { site } from '@data/site';
+---
+
+<BaseLayout title={`Thanks — ${site.name}`} description="Your message has been sent." noindex>
+  <PageIntro eyebrow="Sent">
+    Thanks — I'll take a look and get back to you.
+    <p slot="lede">Usually within a working day or two.</p>
+  </PageIntro>
+  <section class="section">
+    <div class="container">
+      <Button href="/" variant="secondary">
+        Back to {site.name}
+      </Button>
+    </div>
+  </section>
+</BaseLayout>

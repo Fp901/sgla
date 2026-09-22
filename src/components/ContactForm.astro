@@ -1,0 +1,352 @@
+---
+/**
+ * Contact form. Works without JavaScript (plain POST, server redirects to /thanks);
+ * with JavaScript it validates inline, posts JSON and shows success/error states in place.
+ */
+import { site } from '@data/site';
+import { limits } from '@lib/contact';
+import Button from './Button.astro';
+
+interface Props {
+  heading?: string;
+}
+---
+
+<form
+  class="contact-form"
+  method="post"
+  action="/api/contact"
+  novalidate
+  data-contact-form
+  aria-describedby="form-status"
+>
+  <div class="field">
+    <label for="name">Name</label>
+    <input id="name" name="name" type="text" autocomplete="name" required maxlength={limits.name} />
+    <p class="field__error" id="name-error" hidden></p>
+  </div>
+
+  <div class="field">
+    <label for="business">Business</label>
+    <input
+      id="business"
+      name="business"
+      type="text"
+      autocomplete="organization"
+      required
+      maxlength={limits.business}
+    />
+    <p class="field__error" id="business-error" hidden></p>
+  </div>
+
+  <div class="field">
+    <label for="email">Email</label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      autocomplete="email"
+      inputmode="email"
+      required
+      maxlength={limits.email}
+    />
+    <p class="field__error" id="email-error" hidden></p>
+  </div>
+
+  <div class="field">
+    <label for="website">Current website</label>
+    <input
+      id="website"
+      name="website"
+      type="text"
+      autocomplete="url"
+      inputmode="url"
+      placeholder="yourbusiness.co.uk"
+      required
+      maxlength={limits.website}
+    />
+    <p class="field__error" id="website-error" hidden></p>
+  </div>
+
+  <div class="field">
+    <label for="message">What isn't working about it?</label>
+    <textarea id="message" name="message" rows="5" required maxlength={limits.message}></textarea>
+    <p class="field__error" id="message-error" hidden></p>
+  </div>
+
+  <!-- Honeypot: hidden from people, tempting to bots. -->
+  <div class="field field--trap" aria-hidden="true">
+    <label for="company_url">Leave this empty</label>
+    <input id="company_url" name="company_url" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <input type="hidden" name="ts" value="" data-ts />
+
+  <div class="contact-form__actions">
+    <Button type="submit" size="lg" event="contact_submit" class="contact-form__submit">
+      Show me what you'd change
+    </Button>
+    <p class="contact-form__note muted">
+      Or email <a href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
+  </div>
+
+  <p class="contact-form__status" id="form-status" role="alert" hidden></p>
+</form>
+
+<div class="contact-form__success" data-contact-success hidden tabindex="-1">
+  <h2>Thanks — I'll take a look and get back to you.</h2>
+  <p class="muted">Usually within a working day or two.</p>
+</div>
+
+<script>
+  import { contactFields, validateContact, type ContactErrors } from '@lib/contact';
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const success = document.querySelector<HTMLElement>('[data-contact-success]');
+
+  if (form && success) {
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const submitLabel = submit?.querySelector<HTMLElement>('.button__label');
+    const status = form.querySelector<HTMLElement>('#form-status')!;
+    const ts = form.querySelector<HTMLInputElement>('[data-ts]');
+    if (ts) ts.value = String(Date.now());
+
+    // Optional prefill from ?topic=care (linked from the care plan section).
+    const topic = new URLSearchParams(location.search).get('topic');
+    const message = form.elements.namedItem('message') as HTMLTextAreaElement | null;
+    if (topic === 'care' && message && !message.value) {
+      message.value = "I'd like to ask about SGLA Care.\n\n";
+    }
+
+    const fieldEl = (name: string) =>
+      form.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement | null;
+    const errorEl = (name: string) => form.querySelector<HTMLElement>(`#${name}-error`);
+
+    /** Renders inline errors, focuses the first invalid field, returns whether any exist. */
+    const showErrors = (errors: ContactErrors): boolean => {
+      const invalid: Array<HTMLInputElement | HTMLTextAreaElement> = [];
+      for (const name of contactFields) {
+        const input = fieldEl(name);
+        const error = errorEl(name);
+        if (!input || !error) continue;
+        const text = errors[name];
+        error.textContent = text ?? '';
+        error.hidden = !text;
+        input.setAttribute('aria-invalid', text ? 'true' : 'false');
+        if (text) {
+          input.setAttribute('aria-describedby', error.id);
+          invalid.push(input);
+        } else {
+          input.removeAttribute('aria-describedby');
+        }
+      }
+      invalid[0]?.focus();
+      return invalid.length > 0;
+    };
+
+    const setStatus = (text: string, isError = true) => {
+      status.textContent = text;
+      status.hidden = !text;
+      status.classList.toggle('is-error', isError);
+    };
+
+    const setBusy = (busy: boolean) => {
+      if (!submit) return;
+      submit.disabled = busy;
+      submit.setAttribute('aria-busy', String(busy));
+      if (submitLabel) submitLabel.textContent = busy ? 'Sending…' : "Show me what you'd change";
+    };
+
+    // Clear a field's error as soon as the person edits it.
+    for (const name of contactFields) {
+      fieldEl(name)?.addEventListener('input', () => {
+        const error = errorEl(name);
+        if (error && !error.hidden) showErrors({});
+      });
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (submit?.disabled) return; // guards against double submission
+
+      const raw = Object.fromEntries(new FormData(form).entries());
+      const { values, errors } = validateContact(raw);
+      setStatus('');
+      if (showErrors(errors)) return;
+
+      setBusy(true);
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ ...values, company_url: raw.company_url ?? '', ts: raw.ts ?? '' }),
+        });
+
+        const body = (await response.json().catch(() => ({}))) as {
+          ok?: boolean;
+          errors?: ContactErrors;
+          message?: string;
+        };
+
+        if (response.ok && body.ok) {
+          form.hidden = true;
+          success.hidden = false;
+          success.focus();
+          window.va?.('event', { name: 'contact_success' });
+          return;
+        }
+
+        if (body.errors && showErrors(body.errors)) {
+          setBusy(false);
+          return;
+        }
+
+        throw new Error(body.message ?? `Request failed (${response.status})`);
+      } catch {
+        setBusy(false);
+        setStatus(
+          "Sorry — that didn't send. Please try again, or email francois@sgla.co.uk directly.",
+        );
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact-form {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .field {
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .field label {
+    font-weight: 600;
+    font-size: var(--text-sm);
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: #fff;
+    transition: border-color var(--duration-fast) ease;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+
+  .field input::placeholder {
+    color: rgb(104 104 104 / 0.6);
+  }
+
+  .field input:hover,
+  .field textarea:hover {
+    border-color: var(--color-text);
+  }
+
+  .field input:focus-visible,
+  .field textarea:focus-visible {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgb(49 92 255 / 0.2);
+  }
+
+  .field [aria-invalid='true'] {
+    border-color: var(--color-error);
+  }
+
+  .field__error {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-error);
+  }
+
+  .field__error::before {
+    content: '↑ ';
+  }
+
+  .field--trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .contact-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md) var(--space-lg);
+    margin-top: var(--space-xs);
+  }
+
+  .contact-form__note {
+    font-size: var(--text-sm);
+  }
+
+  .contact-form__note a {
+    color: var(--color-text);
+  }
+
+  .contact-form :global(.contact-form__submit[disabled]) {
+    opacity: 0.7;
+    cursor: progress;
+  }
+
+  .contact-form__status {
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    font-weight: 500;
+  }
+
+  .contact-form__status.is-error {
+    border-color: var(--color-error);
+    color: var(--color-error);
+  }
+
+  .contact-form__success {
+    display: grid;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .contact-form__success:focus {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .contact-form__success h2 {
+    font-size: var(--text-xl);
+  }
+
+  @media (min-width: 40em) {
+    .contact-form {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field:nth-child(n + 3),
+    .contact-form__actions,
+    .contact-form__status {
+      grid-column: span 2;
+    }
+
+    .field:nth-child(3),
+    .field:nth-child(4) {
+      grid-column: span 1;
+    }
+  }
+</style>

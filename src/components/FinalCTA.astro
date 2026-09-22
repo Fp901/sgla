@@ -1,0 +1,53 @@
+---
+import { site } from '@data/site';
+import Button from './Button.astro';
+---
+
+<section class="final-cta theme-dark" aria-labelledby="final-cta-title">
+  <div class="container final-cta__inner">
+    <h2 id="final-cta-title" class="final-cta__title">
+      Is your current website still doing the job?
+    </h2>
+    <p class="final-cta__lede lede">
+      Send it over. I'll take a look and tell you whether I'd rebuild it.
+    </p>
+    <div class="final-cta__actions">
+      <Button href={site.cta.href} size="lg" event="cta_final">
+        {site.cta.label}
+      </Button>
+      <a class="final-cta__email" href={`mailto:${site.email}`}>
+        {site.email}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .final-cta {
+    padding-block: clamp(6rem, 4rem + 8vw, 12rem);
+  }
+
+  .final-cta__inner {
+    display: grid;
+    gap: var(--space-lg);
+    justify-items: start;
+  }
+
+  .final-cta__title {
+    max-width: 12em;
+    font-size: var(--text-h1);
+    font-size: clamp(2.5rem, 1.5rem + 4.5vw, 5.5rem);
+  }
+
+  .final-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md) var(--space-lg);
+  }
+
+  .final-cta__email {
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+</style>

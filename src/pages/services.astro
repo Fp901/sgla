@@ -1,0 +1,143 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageIntro from '@components/PageIntro.astro';
+import PricingCard from '@components/PricingCard.astro';
+import CarePlan from '@components/CarePlan.astro';
+import Process from '@components/Process.astro';
+import FAQ from '@components/FAQ.astro';
+import FinalCTA from '@components/FinalCTA.astro';
+import { site } from '@data/site';
+
+const services = [
+  {
+    title: 'Website rebuilds',
+    text: 'The core of what SGLA does. Your current site, rebuilt from the ground up: new design, new code, your content reworked where it needs it, then launched on hosting you own.',
+  },
+  {
+    title: 'New websites',
+    text: 'Starting from nothing is fine too. Same process, same price, same outcome — a site that looks like your business and loads like it should.',
+  },
+  {
+    title: 'Performance and mobile',
+    text: 'Every site is built mobile-first and tested on real connections, not just a fast desktop. Fast loading is part of the build, not an upsell.',
+  },
+  {
+    title: 'SEO foundations',
+    text: 'Sensible titles, descriptions, structured data, sitemap, redirects from old URLs and clean semantic HTML. The groundwork search engines expect, done properly.',
+  },
+  {
+    title: 'Contact forms and analytics',
+    text: 'A form that reaches your inbox and lightweight, privacy-conscious analytics so you can see what the site is doing without slowing it down.',
+  },
+  {
+    title: 'Handover',
+    text: 'You get the domain, the hosting account and the code, with clear notes on where everything lives. If you ever want another developer to take over, they can.',
+  },
+];
+---
+
+<BaseLayout
+  title={`Services — ${site.name}`}
+  description="Custom website rebuilds and new websites for independent businesses. £1,795 for a 5–8 page site, built properly and handed over completely."
+>
+  <PageIntro eyebrow="Services">
+    What SGLA does.
+    <p slot="lede">
+      One service, done well: custom websites for independent businesses, built to load quickly,
+      work on phones and belong to you.
+    </p>
+  </PageIntro>
+
+  <section class="section services" aria-label="What's included">
+    <div class="container">
+      <ul class="services__list">
+        {services.map((service) => (
+          <li class="service">
+            <h2 class="service__title">{service.title}</h2>
+            <p class="muted">{service.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="not-offered" aria-labelledby="not-title">
+    <div class="container not-offered__inner">
+      <h2 id="not-title" class="not-offered__title">
+        What SGLA doesn't do
+      </h2>
+      <div class="not-offered__body">
+        <p>
+          No editing inside Wix, Squarespace or similar builders. No ongoing SEO retainers. No
+          social media management. If your site needs significant work, the honest answer is usually
+          to rebuild it — so that's the service.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <PricingCard />
+  <CarePlan />
+  <Process />
+  <FAQ />
+  <FinalCTA />
+</BaseLayout>
+
+<style>
+  .services {
+    padding-top: var(--space-xl);
+  }
+
+  .services__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-lg) var(--grid-gap);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .service {
+    display: grid;
+    gap: var(--space-sm);
+    align-content: start;
+    padding-top: var(--space-lg);
+  }
+
+  .service__title {
+    font-size: var(--text-xl);
+  }
+
+  .not-offered {
+    background: var(--color-surface);
+    padding-block: var(--space-xl);
+  }
+
+  .not-offered__inner {
+    display: grid;
+    gap: var(--space-md) var(--grid-gap);
+  }
+
+  .not-offered__title {
+    font-size: var(--text-xl);
+  }
+
+  .not-offered__body {
+    max-width: 60ch;
+  }
+
+  @media (min-width: 48em) {
+    .services__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .not-offered__inner {
+      grid-template-columns: 1fr 2fr;
+    }
+  }
+
+  @media (min-width: 64em) {
+    .services__list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

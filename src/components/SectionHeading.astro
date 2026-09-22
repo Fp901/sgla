@@ -1,0 +1,54 @@
+---
+/**
+ * Eyebrow + heading + optional lede, in a consistent rhythm.
+ * `level` keeps the heading hierarchy honest on every page.
+ */
+interface Props {
+  eyebrow?: string;
+  level?: 1 | 2 | 3;
+  align?: 'start' | 'center';
+  /** Cap the heading width for long headlines. */
+  narrow?: boolean;
+  id?: string;
+  class?: string;
+}
+
+const { eyebrow, level = 2, align = 'start', narrow = false, id, class: className } = Astro.props;
+const Heading = `h${level}` as 'h1' | 'h2' | 'h3';
+---
+
+<div class:list={['section-heading', `section-heading--${align}`, className]}>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <Heading
+    id={id}
+    class:list={{ 'section-heading__title': true, 'section-heading__title--narrow': narrow }}
+  >
+    <slot />
+  </Heading>
+  {Astro.slots.has('lede') && (
+    <div class="lede">
+      <slot name="lede" />
+    </div>
+  )}
+</div>
+
+<style>
+  .section-heading {
+    display: grid;
+    gap: var(--space-md);
+    margin-bottom: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+  }
+
+  .section-heading--center {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .section-heading__title--narrow {
+    max-width: 14em;
+  }
+
+  .lede :global(p + p) {
+    margin-top: 0.75em;
+  }
+</style>

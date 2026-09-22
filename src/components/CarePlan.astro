@@ -1,0 +1,82 @@
+---
+import { pricing, site } from '@data/site';
+import Button from './Button.astro';
+
+const { care } = pricing;
+---
+
+<section class="section section--flush-top care" aria-labelledby="care-title">
+  <div class="container">
+    <div class="care__panel">
+      <div class="care__copy">
+        <h2 id="care-title" class="care__title">
+          Want me to look after it?
+        </h2>
+        <p>You don't need a monthly plan to keep your website running. It's yours.</p>
+        <p>
+          But if you'd rather have someone handle the technical side, {care.name} is available for{' '}
+          <strong>
+            {care.price}/{care.period}
+          </strong>
+          .
+        </p>
+        <Button href={`${site.cta.href}?topic=care`} variant="secondary" event="cta_care">
+          Ask about {care.name}
+        </Button>
+      </div>
+      <ul class="care__list">
+        {care.includes.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .care__panel {
+    display: grid;
+    gap: var(--space-lg) var(--grid-gap);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .care__copy {
+    display: grid;
+    gap: var(--space-md);
+    justify-items: start;
+  }
+
+  .care__copy p {
+    max-width: 34em;
+  }
+
+  .care__title {
+    font-size: var(--text-xl);
+    line-height: 1.15;
+  }
+
+  .care__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-xs);
+    align-content: start;
+    font-size: var(--text-sm);
+    font-weight: 500;
+  }
+
+  .care__list li {
+    padding: var(--space-xs) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 48em) {
+    .care__panel {
+      grid-template-columns: 1.6fr 1fr;
+      align-items: start;
+    }
+  }
+</style>

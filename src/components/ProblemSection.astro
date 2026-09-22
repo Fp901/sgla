@@ -1,0 +1,80 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+const problems = [
+  { title: 'Looks dated', text: "Your business has moved on. Your website hasn't." },
+  { title: 'Feels slow', text: "People shouldn't have to wait for your website to load." },
+  {
+    title: "Doesn't belong to you",
+    text: "You're tied to a platform or system you don't really control.",
+  },
+];
+---
+
+<section class="section problem" aria-labelledby="problem-title">
+  <div class="container">
+    <SectionHeading id="problem-title" eyebrow="The problem" narrow>
+      Your website shouldn't hold your business back.
+      <Fragment slot="lede">
+        <p>
+          A lot of independent businesses don't need a bigger agency. They just need a better
+          website.
+        </p>
+        <p>
+          If your current site is slow, dated, difficult to update or simply doesn't reflect the
+          quality of your business, rebuilding it properly can make more sense than endlessly
+          patching it.
+        </p>
+      </Fragment>
+    </SectionHeading>
+
+    <ul class="problem__list">
+      {problems.map((problem, index) => (
+        <li class="problem__item">
+          <span class="problem__index" aria-hidden="true">
+            0{index + 1}
+          </span>
+          <h3>{problem.title}</h3>
+          <p class="muted">{problem.text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .problem__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--grid-gap);
+  }
+
+  .problem__item {
+    display: grid;
+    gap: var(--space-sm);
+    align-content: start;
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .problem__index {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-muted);
+    margin-bottom: var(--space-md);
+  }
+
+  @media (min-width: 48em) {
+    .problem__list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .problem__item {
+      min-height: 15rem;
+    }
+  }
+</style>

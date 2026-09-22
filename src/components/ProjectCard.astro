@@ -1,0 +1,183 @@
+---
+import { Image } from 'astro:assets';
+import type { Project } from '@data/projects';
+
+interface Props {
+  project: Project;
+  /** Above-the-fold images should load eagerly. */
+  loading?: 'eager' | 'lazy';
+  /** Match the surrounding hierarchy: h3 under a section h2, h2 directly under a page h1. */
+  headingLevel?: 2 | 3;
+}
+
+const { project, loading = 'lazy', headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+const isExternal = project.url?.startsWith('http');
+---
+
+<article class="project" id={`project-${project.slug}`}>
+  <div class="project__media">
+    <Image
+      src={project.image}
+      alt={project.imageAlt}
+      widths={[480, 800, 1200, 1600]}
+      sizes="(min-width: 64em) 600px, (min-width: 48em) 50vw, 100vw"
+      loading={loading}
+      decoding="async"
+      format="webp"
+      quality={80}
+    />
+  </div>
+  <div class="project__body">
+    <div class="project__meta">
+      <Heading class="project__name">
+        {project.url ? (
+          <a
+            href={project.url}
+            class="project__link"
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noopener' : undefined}
+          >
+            {project.name}
+          </a>
+        ) : (
+          project.name
+        )}
+      </Heading>
+      <p class="project__category">{project.category}</p>
+    </div>
+    <p class="project__description muted">{project.description}</p>
+    <div class="project__footer">
+      {project.technologies && (
+        <ul class="project__tags" aria-label="Built with">
+          {project.technologies.map((tech) => (
+            <li>{tech}</li>
+          ))}
+        </ul>
+      )}
+      {project.url && (
+        <span class="project__cta" aria-hidden="true">
+          View project <span class="project__arrow">→</span>
+        </span>
+      )}
+    </div>
+  </div>
+</article>
+
+<style>
+  .project {
+    position: relative;
+    display: grid;
+    gap: var(--space-md);
+    align-content: start;
+  }
+
+  .project__media {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .project__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 600ms var(--ease-out);
+  }
+
+  .project:has(.project__link:hover) .project__media img {
+    transform: scale(1.02);
+  }
+
+  .project__body {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .project__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-xs) var(--space-md);
+  }
+
+  .project__name {
+    font-size: var(--text-xl);
+  }
+
+  /* Whole card is clickable via the pseudo-element; the link itself stays a real link. */
+  .project__link {
+    text-decoration: none;
+  }
+
+  .project__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-lg);
+  }
+
+  .project__link:focus-visible {
+    box-shadow: none;
+  }
+
+  .project:has(.project__link:focus-visible) {
+    box-shadow: var(--focus-ring);
+    border-radius: var(--radius-lg);
+  }
+
+  .project__category {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .project__description {
+    max-width: 44em;
+  }
+
+  .project__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm) var(--space-md);
+    margin-top: var(--space-2xs);
+  }
+
+  .project__tags {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .project__tags li {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    color: var(--color-muted);
+  }
+
+  .project__cta {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  .project__arrow {
+    display: inline-block;
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+
+  .project:has(.project__link:hover) .project__arrow {
+    transform: translateX(3px);
+  }
+</style>

@@ -1,0 +1,126 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+const parts = ['Domain', 'Code', 'Hosting'];
+---
+
+<section class="section ownership theme-dark" aria-labelledby="ownership-title">
+  <div class="container ownership__inner">
+    <div class="ownership__copy">
+      <SectionHeading id="ownership-title" eyebrow="Ownership">
+        You own it.
+        <Fragment slot="lede">
+          <p>The domain is yours. The hosting account is yours. The code is yours.</p>
+          <p>
+            If you stop working with SGLA, your website doesn't disappear. You can keep using it,
+            hand it to another developer or move it somewhere else.
+          </p>
+          <p>That's what owning your website means.</p>
+        </Fragment>
+      </SectionHeading>
+    </div>
+
+    <figure class="tree">
+      <div class="tree__root">Your website</div>
+      <svg class="tree__lines" viewBox="0 0 600 80" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          d="M300 0 V40 M100 40 H500 M100 40 V80 M300 40 V80 M500 40 V80"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          vector-effect="non-scaling-stroke"
+        />
+      </svg>
+      <ul class="tree__leaves">
+        {parts.map((part) => (
+          <li>{part}</li>
+        ))}
+      </ul>
+      <figcaption class="tree__caption">All belong to you</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .ownership__inner {
+    display: grid;
+    gap: var(--space-xl) var(--grid-gap);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: center;
+  }
+
+  .ownership__copy {
+    grid-column: span 12;
+  }
+
+  .ownership__copy :global(.section-heading) {
+    margin-bottom: 0;
+  }
+
+  .tree {
+    grid-column: span 12;
+    display: grid;
+    justify-items: center;
+    gap: 0;
+    padding: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(1rem, 0.5rem + 2vw, 2rem);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .tree__root {
+    padding: 0.7rem 1.4rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-on-ink);
+    color: var(--color-ink);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .tree__lines {
+    width: 100%;
+    height: clamp(3rem, 2rem + 4vw, 5rem);
+    color: var(--color-border-strong);
+  }
+
+  .tree__leaves {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    text-align: center;
+  }
+
+  .tree__leaves li {
+    font-size: clamp(1rem, 0.7rem + 1.4vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: var(--tracking-snug);
+    text-transform: uppercase;
+  }
+
+  .tree__caption {
+    margin-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    padding-top: var(--space-md);
+    width: 100%;
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  @media (min-width: 64em) {
+    .ownership__copy {
+      grid-column: span 6;
+    }
+
+    .tree {
+      grid-column: 8 / span 5;
+    }
+  }
+</style>

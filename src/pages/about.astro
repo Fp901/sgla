@@ -1,0 +1,123 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageIntro from '@components/PageIntro.astro';
+import FinalCTA from '@components/FinalCTA.astro';
+import { site } from '@data/site';
+
+const principles = [
+  {
+    title: 'One person, start to finish',
+    text: 'You talk to the person doing the work. No account manager relaying messages, no handoffs between departments.',
+  },
+  {
+    title: 'Built, not assembled',
+    text: 'No page builders, no themes. The site is written for your business, which is why it loads quickly and looks like yours.',
+  },
+  {
+    title: 'You own everything',
+    text: 'Domain, hosting, code. Ownership is the default, not a premium option.',
+  },
+  {
+    title: 'Straight answers',
+    text: "If I'd keep your current site, I'll say so. If I'd rebuild it, I'll say why and what it costs.",
+  },
+];
+---
+
+<BaseLayout
+  title={`About — ${site.name}`}
+  description="SGLA is an independent web developer based in Bury St Edmunds, Suffolk, building fast, well-made websites for owner-led businesses across the UK."
+>
+  <PageIntro eyebrow="About">
+    A developer, not an agency.
+    <Fragment slot="lede">
+      <p>
+        SGLA is {site.founder} — an independent web developer based in {site.location}, working with
+        owner-led businesses across the UK.
+      </p>
+    </Fragment>
+  </PageIntro>
+
+  <section class="section about" aria-label="About SGLA">
+    <div class="container about__inner">
+      <div class="about__story prose">
+        <p>
+          Most independent businesses don't need an agency. They need someone who can design, build
+          and launch a website properly, explain what they're doing in plain English, and then hand
+          the whole thing over.
+        </p>
+        <p>
+          That's the gap SGLA fills. One developer who cares about the design as much as the code,
+          who tests on a phone before calling something finished, and who would rather build you a
+          site you own than rent you one.
+        </p>
+        <p>
+          <!-- PLACEHOLDER: add a short paragraph about François's background and experience here. -->
+          <em class="muted">[Background and experience — to be supplied by François.]</em>
+        </p>
+      </div>
+
+      <ul class="principles">
+        {principles.map((item) => (
+          <li class="principle">
+            <h2 class="principle__title">{item.title}</h2>
+            <p class="muted">{item.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <FinalCTA />
+</BaseLayout>
+
+<style>
+  .about {
+    padding-top: var(--space-xl);
+  }
+
+  .about__inner {
+    display: grid;
+    gap: var(--space-xl) var(--grid-gap);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .about__story {
+    grid-column: span 12;
+    font-size: var(--text-lg);
+  }
+
+  .principles {
+    grid-column: span 12;
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .principle {
+    display: grid;
+    gap: var(--space-xs);
+    padding-top: var(--space-lg);
+  }
+
+  .principle + .principle {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .principle__title {
+    font-size: var(--text-xl);
+  }
+
+  @media (min-width: 64em) {
+    .about__story {
+      grid-column: span 6;
+    }
+
+    .principles {
+      grid-column: 8 / span 5;
+    }
+  }
+</style>

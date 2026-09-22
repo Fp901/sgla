@@ -1,0 +1,33 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Button from '@components/Button.astro';
+import { site } from '@data/site';
+---
+
+<BaseLayout title={`Page not found — ${site.name}`} description="This page doesn't exist." noindex>
+  <section class="not-found">
+    <div class="container not-found__inner">
+      <p class="eyebrow">404</p>
+      <h1>Lost?</h1>
+      <p class="lede">This page doesn't exist.</p>
+      <Button href="/" size="lg">
+        Back to {site.name}
+      </Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: calc(100dvh - var(--header-height));
+    display: grid;
+    align-items: center;
+    padding-block: var(--space-2xl);
+  }
+
+  .not-found__inner {
+    display: grid;
+    gap: var(--space-lg);
+    justify-items: start;
+  }
+</style>

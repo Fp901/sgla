@@ -1,0 +1,53 @@
+---
+/** Simple prose layout for privacy/terms. Content is slotted in as plain HTML. */
+import BaseLayout from './BaseLayout.astro';
+import PageIntro from '@components/PageIntro.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+  updated: string;
+}
+
+const { title, description, heading, updated } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <PageIntro eyebrow="Legal">
+    {heading}
+    <p slot="lede">Last updated {updated}.</p>
+  </PageIntro>
+
+  <section class="section legal">
+    <div class="container">
+      <div class="legal__notice" role="note">
+        <strong>Draft.</strong> This wording describes how the site actually works but has not been
+        reviewed by a solicitor. Replace or confirm it before launch.
+      </div>
+      <div class="prose legal__body">
+        <slot />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding-top: var(--space-xl);
+  }
+
+  .legal__notice {
+    max-width: 62ch;
+    margin-bottom: var(--space-xl);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .legal__body {
+    font-size: var(--text-base);
+  }
+</style>

@@ -1,0 +1,91 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+const steps = [
+  { title: 'Show me your website', text: 'Send over your current site.' },
+  {
+    title: 'We work out what needs changing',
+    text: "I'll tell you what I'd keep, what I'd change and what I'd rebuild.",
+  },
+  { title: 'I build it', text: 'Design, development, content, testing and launch.' },
+  {
+    title: 'You get the keys',
+    text: 'The website goes live and the code, domain and hosting remain yours.',
+  },
+];
+---
+
+<section class="section process" id="how-it-works" aria-labelledby="process-title">
+  <div class="container">
+    <SectionHeading id="process-title" eyebrow="How it works" narrow>
+      No six-week discovery process.
+      <p slot="lede">Just a straightforward website project.</p>
+    </SectionHeading>
+
+    <ol class="steps">
+      {steps.map((step, index) => (
+        <li class="step">
+          <span class="step__number" aria-hidden="true">
+            0{index + 1}
+          </span>
+          <h3 class="step__title">{step.title}</h3>
+          <p class="step__text muted">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--color-border);
+    counter-reset: step;
+  }
+
+  .step {
+    display: grid;
+    gap: var(--space-xs);
+    padding-block: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .step__number {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-accent);
+    margin-bottom: var(--space-xs);
+  }
+
+  .step__title {
+    font-size: var(--text-xl);
+  }
+
+  @media (min-width: 48em) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 var(--grid-gap);
+    }
+  }
+
+  @media (min-width: 64em) {
+    .steps {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: auto auto auto;
+      border-top: 0;
+    }
+
+    /* Subgrid keeps numbers, titles and descriptions on shared rows. */
+    .step {
+      grid-row: span 3;
+      grid-template-rows: subgrid;
+      border-bottom: 0;
+      border-top: 1px solid var(--color-border);
+      padding-block: var(--space-lg) 0;
+    }
+  }
+</style>

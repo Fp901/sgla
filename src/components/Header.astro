@@ -1,0 +1,249 @@
+---
+import { site, navigation } from '@data/site';
+import Button from './Button.astro';
+
+const currentPath = Astro.url.pathname;
+const isCurrent = (href: string) => currentPath === href || currentPath.startsWith(`${href}/`);
+const showCta = !isCurrent(site.cta.href);
+---
+
+<header class="header">
+  <div class="container header__inner">
+    <a href="/" class="header__logo" aria-label={`${site.name} home`}>
+      {site.name}
+    </a>
+
+    <nav class="header__nav" aria-label="Primary">
+      <ul class="header__list" id="primary-menu">
+        {navigation.main.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+        {showCta && (
+          <li class="header__cta-item">
+            <Button href={site.cta.href} event="cta_header">
+              {site.cta.label}
+            </Button>
+          </li>
+        )}
+      </ul>
+    </nav>
+
+    <button
+      class="header__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-menu"
+      data-menu-toggle
+    >
+      <span class="visually-hidden" data-menu-label>
+        Open menu
+      </span>
+      <span class="header__toggle-icon" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+  </div>
+</header>
+
+<script>
+  // Mobile menu toggle. Progressive: without JS the toggle is hidden and the nav shows inline.
+  const header = document.querySelector<HTMLElement>('.header');
+  const toggle = header?.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const label = toggle?.querySelector<HTMLElement>('[data-menu-label]');
+  const menu = header?.querySelector<HTMLElement>('#primary-menu');
+
+  if (header && toggle && label && menu) {
+    const setOpen = (open: boolean) => {
+      header.dataset.open = String(open);
+      toggle.setAttribute('aria-expanded', String(open));
+      label.textContent = open ? 'Close menu' : 'Open menu';
+      document.documentElement.toggleAttribute('data-menu-open', open);
+    };
+
+    toggle.addEventListener('click', () => setOpen(header.dataset.open !== 'true'));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && header.dataset.open === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    // Close if the viewport grows past the mobile breakpoint.
+    const mq = window.matchMedia('(min-width: 48em)');
+    mq.addEventListener('change', (event) => event.matches && setOpen(false));
+
+    menu.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setOpen(false);
+    });
+  }
+
+  // Lightweight analytics for primary CTAs (no-op if analytics isn't loaded).
+  document.addEventListener('click', (event) => {
+    const el = (event.target as HTMLElement).closest<HTMLElement>('[data-event]');
+    if (el?.dataset.event) window.va?.('event', { name: el.dataset.event });
+  });
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    min-height: var(--header-height);
+  }
+
+  .header__logo {
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+    padding: 0.5rem 0;
+  }
+
+  .header__list {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 1rem + 1.5vw, 2.5rem);
+    list-style: none;
+    padding: 0;
+  }
+
+  .header__list a:not(.button) {
+    display: inline-block;
+    padding: 0.5rem 0;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    color: var(--color-muted);
+    transition: color var(--duration-fast) ease;
+  }
+
+  .header__list a:not(.button):hover,
+  .header__list a[aria-current='page'] {
+    color: var(--color-text);
+  }
+
+  .header__list a[aria-current='page'] {
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.45em;
+  }
+
+  .header__toggle {
+    display: none;
+    width: 3rem;
+    height: 3rem;
+    margin-right: -0.5rem;
+    border-radius: var(--radius-md);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header__toggle-icon {
+    display: grid;
+    gap: 6px;
+    width: 22px;
+  }
+
+  .header__toggle-icon span {
+    display: block;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform var(--duration-base) var(--ease-out);
+    transform-origin: center;
+  }
+
+  .header[data-open='true'] .header__toggle-icon span:first-child {
+    transform: translateY(4px) rotate(45deg);
+  }
+
+  .header[data-open='true'] .header__toggle-icon span:last-child {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+
+  @media (max-width: 47.99em) {
+    .header__toggle {
+      display: inline-flex;
+    }
+
+    :global(html.js) .header__nav {
+      display: none;
+      position: absolute;
+      inset: 100% 0 auto 0;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: 0 24px 40px -24px rgb(17 17 17 / 0.25);
+    }
+
+    .header[data-open='true'] .header__nav {
+      display: block;
+    }
+
+    .header__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: var(--space-sm) var(--gutter) var(--space-lg);
+    }
+
+    .header__list li {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header__list a:not(.button) {
+      display: block;
+      padding: 1rem 0;
+      font-size: 1.125rem;
+      color: var(--color-text);
+    }
+
+    .header__list a[aria-current='page'] {
+      text-underline-offset: 0.3em;
+    }
+
+    .header__cta-item {
+      border-bottom: 0 !important;
+      padding-top: var(--space-md);
+    }
+
+    .header__cta-item :global(.button) {
+      width: 100%;
+    }
+  }
+
+  /* No JS: hide the toggle and let the nav render inline. */
+  :global(html:not(.js)) .header__toggle {
+    display: none;
+  }
+
+  :global(html:not(.js)) .header__list {
+    flex-wrap: wrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: var(--color-bg);
+    }
+  }
+</style>

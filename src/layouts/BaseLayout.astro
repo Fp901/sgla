@@ -1,0 +1,52 @@
+---
+import { Font } from 'astro:assets';
+import Seo, { type SeoProps } from '@components/Seo.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import '../styles/global.css';
+
+type Props = SeoProps;
+
+const props = Astro.props;
+const isProd = import.meta.env.PROD;
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <Seo {...props} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <Font cssVariable="--font-inter" preload />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+
+    {
+      /* Vercel Web Analytics: one tiny script, production only. Custom events are sent
+         with window.va('event', { name }) from the CTA and contact form. */
+      isProd && <script is:inline>
+        window.va =
+          window.va ||
+          function () {
+            (window.vaq = window.vaq || []).push(arguments);
+          };
+      </script>
+    }
+    {isProd && <script is:inline defer src="/_vercel/insights/script.js"></script>}
+  </body>
+</html>
+
+<style>
+  main:focus {
+    outline: none;
+  }
+</style>

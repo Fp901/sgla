@@ -1,0 +1,8 @@
+{
+  "name": "SGLA",
+  "short_name": "SGLA",
+  "icons": [{ "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }],
+  "theme_color": "#f7f6f2",
+  "background_color": "#f7f6f2",
+  "display": "browser"
+}

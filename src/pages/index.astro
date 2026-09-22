@@ -1,0 +1,81 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/Hero.astro';
+import Pillars from '@components/Pillars.astro';
+import ProblemSection from '@components/ProblemSection.astro';
+import SolutionSection from '@components/SolutionSection.astro';
+import SectionHeading from '@components/SectionHeading.astro';
+import ProjectCard from '@components/ProjectCard.astro';
+import OwnershipSection from '@components/OwnershipSection.astro';
+import Process from '@components/Process.astro';
+import PricingCard from '@components/PricingCard.astro';
+import CarePlan from '@components/CarePlan.astro';
+import FAQ from '@components/FAQ.astro';
+import FinalCTA from '@components/FinalCTA.astro';
+import Button from '@components/Button.astro';
+import { featuredProjects } from '@data/projects';
+import { faq } from '@data/faq';
+import { site } from '@data/site';
+import { organisation, website, faqPage } from '@lib/structured-data';
+---
+
+<BaseLayout
+  title={`${site.name} — Websites Built Properly. Without the Agency.`}
+  description={site.description}
+  canonical="/"
+  structuredData={[organisation, website, faqPage(faq)]}
+>
+  <Hero />
+  <Pillars />
+  <ProblemSection />
+  <SolutionSection />
+
+  {featuredProjects.length > 0 && (
+    <section class="section work" aria-labelledby="work-title">
+      <div class="container">
+        <SectionHeading id="work-title" eyebrow="Selected work">
+          A few things I've built.
+        </SectionHeading>
+        <div class="work__grid">
+          {featuredProjects.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+        <div class="work__more">
+          <Button href="/work" variant="secondary">
+            See all work
+          </Button>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <OwnershipSection />
+  <Process />
+  <PricingCard />
+  <CarePlan />
+  <FAQ />
+  <FinalCTA />
+</BaseLayout>
+
+<style>
+  .work__grid {
+    display: grid;
+    gap: var(--space-xl) var(--grid-gap);
+  }
+
+  .work__more {
+    margin-top: var(--space-xl);
+  }
+
+  @media (min-width: 48em) {
+    .work__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* A lone project gets more room rather than an empty column. */
+    .work__grid:has(> :only-child) {
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    }
+  }
+</style>

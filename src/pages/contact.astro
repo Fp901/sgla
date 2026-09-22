@@ -1,0 +1,85 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageIntro from '@components/PageIntro.astro';
+import ContactForm from '@components/ContactForm.astro';
+import { site } from '@data/site';
+---
+
+<BaseLayout
+  title={`Show me your website — ${site.name}`}
+  description="Send over your current website. I'll take a look and tell you honestly whether I'd rebuild it, what I'd change and what it would cost."
+>
+  <PageIntro eyebrow="Show me your website" narrow>
+    Send it over.
+    <p slot="lede">
+      Add your current website and a line or two about what's bothering you. I'll take a look and
+      reply with what I'd keep, what I'd change and what I'd rebuild.
+    </p>
+  </PageIntro>
+
+  <section class="section contact" aria-label="Contact form">
+    <div class="container contact__inner">
+      <div class="contact__form">
+        <ContactForm />
+      </div>
+      <aside class="contact__aside">
+        <h2 class="contact__aside-title">What happens next</h2>
+        <ol class="contact__steps">
+          <li>I look at your current site — properly, on a phone as well as a desktop.</li>
+          <li>You get an honest reply: rebuild, tidy up, or leave it alone.</li>
+          <li>If a rebuild makes sense, I'll set out the scope, price and timing.</li>
+        </ol>
+        <p class="muted">No calls to book, no pitch deck. Just a straight answer.</p>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    padding-top: var(--space-xl);
+  }
+
+  .contact__inner {
+    display: grid;
+    gap: var(--space-xl) var(--grid-gap);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .contact__form {
+    grid-column: span 12;
+  }
+
+  .contact__aside {
+    grid-column: span 12;
+    display: grid;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .contact__aside-title {
+    font-size: var(--text-lg);
+  }
+
+  .contact__steps {
+    display: grid;
+    gap: var(--space-sm);
+    padding-left: 1.25em;
+  }
+
+  @media (min-width: 64em) {
+    .contact__form {
+      grid-column: span 7;
+    }
+
+    .contact__aside {
+      grid-column: 9 / span 4;
+      position: sticky;
+      top: calc(var(--header-height) + var(--space-xl));
+    }
+  }
+</style>

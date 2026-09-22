@@ -1,0 +1,154 @@
+---
+import { site, navigation } from '@data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <a href="/" class="footer__logo">
+        {site.name}
+      </a>
+      <p class="footer__tagline">
+        Websites built properly.
+        <br />
+        Without the agency.
+      </p>
+      <p class="footer__location muted">
+        Based in {site.location}. Working with independent businesses across the UK.
+      </p>
+    </div>
+
+    <nav class="footer__nav" aria-label="Footer">
+      <ul>
+        {navigation.footer.map((item) => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="footer__contact">
+      <p class="eyebrow">Get in touch</p>
+      <a href={`mailto:${site.email}`} class="footer__email">
+        {site.email}
+      </a>
+    </div>
+
+    <div class="footer__legal">
+      <p class="muted">
+        © {site.name} {year}
+      </p>
+      <ul>
+        {navigation.legal.map((item) => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-xl) var(--space-lg);
+    font-size: 0.9375rem;
+  }
+
+  .footer__inner {
+    display: grid;
+    gap: var(--space-xl) var(--grid-gap);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .footer__brand {
+    grid-column: span 12;
+    display: grid;
+    gap: var(--space-md);
+    align-content: start;
+  }
+
+  .footer__logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+    justify-self: start;
+  }
+
+  .footer__tagline {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    letter-spacing: var(--tracking-snug);
+    line-height: 1.25;
+  }
+
+  .footer__location {
+    max-width: 28em;
+  }
+
+  .footer__nav,
+  .footer__contact {
+    grid-column: span 6;
+  }
+
+  .footer ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .footer a:not(.footer__logo) {
+    text-decoration: none;
+  }
+
+  .footer a:not(.footer__logo):hover {
+    color: var(--color-accent);
+  }
+
+  .footer__contact {
+    display: grid;
+    gap: var(--space-xs);
+    align-content: start;
+  }
+
+  .footer__email {
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  .footer__legal {
+    grid-column: span 12;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-muted);
+  }
+
+  .footer__legal ul {
+    display: flex;
+    gap: var(--space-md);
+  }
+
+  @media (min-width: 48em) {
+    .footer__brand {
+      grid-column: span 6;
+    }
+
+    .footer__nav {
+      grid-column: 8 / span 2;
+    }
+
+    .footer__contact {
+      grid-column: 10 / span 3;
+    }
+  }
+</style>

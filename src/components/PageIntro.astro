@@ -1,0 +1,35 @@
+---
+/** Top-of-page heading block for inner pages. Always the page's single h1. */
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  eyebrow?: string;
+  narrow?: boolean;
+}
+
+const { eyebrow, narrow = true } = Astro.props;
+---
+
+<div class="page-intro">
+  <div class="container">
+    <SectionHeading level={1} eyebrow={eyebrow} narrow={narrow}>
+      <slot />
+      {Astro.slots.has('lede') && (
+        <Fragment slot="lede">
+          <slot name="lede" />
+        </Fragment>
+      )}
+    </SectionHeading>
+  </div>
+</div>
+
+<style>
+  .page-intro {
+    padding-block: clamp(3.5rem, 2rem + 6vw, 7rem) 0;
+  }
+
+  .page-intro :global(h1) {
+    font-size: var(--text-h2);
+    font-size: clamp(2.75rem, 1.6rem + 4.5vw, 5.5rem);
+  }
+</style>

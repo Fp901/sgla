@@ -1,0 +1,42 @@
+---
+import LegalLayout from '@layouts/LegalLayout.astro';
+import { site } from '@data/site';
+---
+
+<LegalLayout
+  title={`Terms — ${site.name}`}
+  description="Terms for using the SGLA website."
+  heading="Terms"
+  updated="September 2026"
+>
+  <h2>Using this website</h2>
+  <p>
+    The content on sgla.co.uk is provided for general information about {site.name}'s services.
+    While I aim to keep it accurate and current, it may occasionally be out of date. Nothing here
+    forms part of a contract; the scope, price and terms of any project are agreed in writing before
+    work begins.
+  </p>
+
+  <h2>Prices</h2>
+  <p>
+    Prices shown on this site are correct at the date above and are a guide to the standard offer. A
+    written quote for your project will confirm the exact scope and price.
+  </p>
+
+  <h2>Content and copyright</h2>
+  <p>
+    The design, copy and code of this website belong to {site.name} unless stated otherwise. Work
+    shown in the Work section belongs to the respective clients and is shown with their agreement.
+  </p>
+
+  <h2>Links to other sites</h2>
+  <p>
+    This site links to other websites, including client sites. I'm not responsible for their content
+    or privacy practices.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions about these terms: <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+</LegalLayout>
