@@ -13,7 +13,7 @@ export const organisation = {
   foundingDate: site.company.incorporated,
   // Links the site to the public register, so the business can be verified
   // as a real registered entity rather than an unattributed page.
-  sameAs: [site.company.url],
+  sameAs: [site.company.url, site.profiles.linkedin],
   identifier: {
     '@type': 'PropertyValue',
     propertyID: 'Companies House company number',
@@ -37,9 +37,11 @@ export const organisation = {
   currenciesAccepted: 'GBP',
   founder: {
     '@type': 'Person',
+    '@id': `${site.url}/#founder`,
     name: site.founder,
     jobTitle: 'Web developer',
     alumniOf: { '@type': 'CollegeOrUniversity', name: 'University of Suffolk' },
+    sameAs: [site.profiles.linkedin],
   },
   knowsAbout: [
     'Web design',

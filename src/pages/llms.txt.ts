@@ -63,6 +63,7 @@ export const GET: APIRoute = () => {
     `${site.company.legalName} is a company registered in England and Wales,`,
     `number ${site.company.number}, incorporated ${site.company.incorporated}.`,
     `Register entry: ${site.company.url}`,
+    `LinkedIn: ${site.profiles.linkedin}`,
     '',
     '## Contact',
     '',

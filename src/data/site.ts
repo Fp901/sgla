@@ -11,6 +11,10 @@ export const site = {
    */
   email: 'francois@sgla.co.uk',
   location: 'Bury St Edmunds, Suffolk',
+  /** Public profiles, used for structured data (sameAs) entity linking. */
+  profiles: {
+    linkedin: 'https://www.linkedin.com/in/francois--pretorius',
+  },
   /**
    * Registered company. Used for structured data only. The registered office
    * address is deliberately not published here: it is on the public register,
