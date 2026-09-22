@@ -143,21 +143,22 @@ workflow rule rather than a separate email service, so there is no second vendor
 - Time duration: 10 minutes
 - Scope description: anything
 
-Copy the generated code. It expires quickly, so do step 3 straight away.
+If this errors with *"You are not a part of any CRM service orgs"*, the account has no Zoho CRM
+organisation yet. Open `crm.zoho.eu`, set one up (the free edition is enough), then try again. If
+that URL redirects you to `crm.zoho.com`, your account is on the US data centre, so use
+`api-console.zoho.com` instead and pick `com` in the next step.
 
-**3. Exchange it for a refresh token** (run within the 10 minutes):
+**3. Exchange the code for a refresh token.** The code is single-use and expires in minutes, so
+run this straight away:
 
 ```bash
-curl -X POST https://accounts.zoho.eu/oauth/v2/token \
-  -d grant_type=authorization_code \
-  -d client_id=YOUR_CLIENT_ID \
-  -d client_secret=YOUR_CLIENT_SECRET \
-  -d code=GENERATED_CODE
+node scripts/zoho-token.mjs
 ```
 
-The response contains `refresh_token`. That value is long-lived: put it in `ZOHO_REFRESH_TOKEN`.
-The access token in the same response is short-lived and is not needed, since the site mints its
-own from the refresh token and caches it.
+It asks for the data centre, Client ID, Client Secret and the code, exchanges them, and writes
+`.env` with `0600` permissions. It won't overwrite an existing `.env` that already has Zoho
+values; it writes `.env.zoho.new` instead. The refresh token it returns is long-lived, so this is
+a one-off unless the token is revoked.
 
 **4. Set up the notification email** in Zoho CRM: *Setup → Automation → Workflow Rules → Create
 Rule*, module **Leads**, execute on **Create**, condition `Lead Source is Web Form`, action
