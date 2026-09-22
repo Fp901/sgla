@@ -15,9 +15,6 @@ import Button from './Button.astro';
       <Button href={site.cta.href} size="lg" event="cta_final">
         {site.cta.label}
       </Button>
-      <a class="final-cta__email" href={`mailto:${site.email}`}>
-        {site.email}
-      </a>
     </div>
   </div>
 </section>
@@ -44,10 +41,5 @@ import Button from './Button.astro';
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-md) var(--space-lg);
-  }
-
-  .final-cta__email {
-    font-weight: 500;
-    overflow-wrap: anywhere;
   }
 </style>

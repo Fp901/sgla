@@ -86,7 +86,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     console.error('[contact] submission failed:', error);
     return wantsJson
       ? json({ ok: false, message: 'Could not send your message.' }, 502)
-      : new Response('Sorry, that didn’t send. Please email francois@sgla.co.uk directly.', {
+      : new Response('Sorry, that didn’t send. Please go back and try again in a moment.', {
           status: 502,
         });
   }

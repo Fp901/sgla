@@ -1,6 +1,7 @@
 ---
 import { site, navigation } from '@data/site';
 import Logo from './Logo.astro';
+import Button from './Button.astro';
 
 const year = new Date().getFullYear();
 ---
@@ -33,9 +34,12 @@ const year = new Date().getFullYear();
 
     <div class="footer__contact">
       <p class="eyebrow">Get in touch</p>
-      <a href={`mailto:${site.email}`} class="footer__email">
-        {site.email}
-      </a>
+      <p class="footer__contact-copy muted">
+        Send your current site over and I'll tell you what I'd change.
+      </p>
+      <Button href={site.cta.href} event="cta_footer">
+        {site.cta.label}
+      </Button>
     </div>
 
     <div class="footer__legal">
@@ -92,9 +96,13 @@ const year = new Date().getFullYear();
     max-width: 28em;
   }
 
-  .footer__nav,
-  .footer__contact {
+  .footer__nav {
     grid-column: span 6;
+  }
+
+  /* Full width on small screens: the CTA button needs the room. */
+  .footer__contact {
+    grid-column: span 12;
   }
 
   .footer ul {
@@ -114,13 +122,17 @@ const year = new Date().getFullYear();
 
   .footer__contact {
     display: grid;
-    gap: var(--space-xs);
+    gap: var(--space-sm);
     align-content: start;
+    justify-items: start;
   }
 
-  .footer__email {
-    font-weight: 500;
-    overflow-wrap: anywhere;
+  .footer__contact-copy {
+    max-width: 24em;
+  }
+
+  .footer__contact :global(.button) {
+    justify-self: start;
   }
 
   .footer__legal {
@@ -141,15 +153,15 @@ const year = new Date().getFullYear();
 
   @media (min-width: 48em) {
     .footer__brand {
-      grid-column: span 6;
+      grid-column: span 5;
     }
 
     .footer__nav {
-      grid-column: 8 / span 2;
+      grid-column: 7 / span 2;
     }
 
     .footer__contact {
-      grid-column: 10 / span 3;
+      grid-column: 9 / span 4;
     }
   }
 </style>

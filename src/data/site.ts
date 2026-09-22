@@ -5,6 +5,10 @@ export const site = {
   tagline: 'Websites built properly. Without the agency.',
   description:
     'Fast, modern websites for independent businesses. Custom-built, performance-focused websites that you actually own.',
+  /**
+   * Where enquiries end up. Deliberately NOT rendered anywhere on the site:
+   * contact goes through the form so the address stays off public pages.
+   */
   email: 'francois@sgla.co.uk',
   location: 'Bury St Edmunds, Suffolk',
   founder: 'François Pretorius',

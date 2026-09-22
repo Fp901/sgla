@@ -12,8 +12,9 @@ import { site } from '@data/site';
   <h2>Who this covers</h2>
   <p>
     This notice explains what happens to information you share with {site.name} through
-    <a href={site.url}>sgla.co.uk</a>. The data controller is {site.name}, contactable at
-    <a href={`mailto:${site.email}`}>{site.email}</a>.
+    <a href={site.url}>sgla.co.uk</a>. The data controller is {site.name}, based in
+    {site.location}, and you can get in touch through the
+    <a href={site.cta.href}>contact form</a>.
   </p>
 
   <h2>The contact form</h2>
@@ -48,9 +49,9 @@ import { site } from '@data/site';
   <h2>Your rights</h2>
   <p>
     Under UK GDPR you can ask to see, correct or delete the personal information I hold about you.
-    Email <a href={`mailto:${site.email}`}>{site.email}</a> and I'll deal with it promptly. If
-    you're not happy with how I've handled your data, you can complain to the Information
-    Commissioner's Office (ico.org.uk).
+    Send the request through the <a href={site.cta.href}>contact form</a> and I'll deal with it
+    promptly, and within one month at the latest. If you're not happy with how I've handled your
+    data, you can complain to the Information Commissioner's Office (ico.org.uk).
   </p>
 
   <h2>Changes</h2>

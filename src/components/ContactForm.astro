@@ -3,7 +3,6 @@
  * Contact form. Works without JavaScript (plain POST, server redirects to /thanks);
  * with JavaScript it validates inline, posts JSON and shows success/error states in place.
  */
-import { site } from '@data/site';
 import { limits } from '@lib/contact';
 import Button from './Button.astro';
 
@@ -85,9 +84,6 @@ interface Props {
     <Button type="submit" size="lg" event="contact_submit" class="contact-form__submit">
       Show me what you'd change
     </Button>
-    <p class="contact-form__note muted">
-      Or email <a href={`mailto:${site.email}`}>{site.email}</a>
-    </p>
   </div>
 
   <p class="contact-form__status" id="form-status" role="alert" hidden></p>
@@ -204,9 +200,7 @@ interface Props {
         throw new Error(body.message ?? `Request failed (${response.status})`);
       } catch {
         setBusy(false);
-        setStatus(
-          "Sorry, that didn't send. Please try again, or email francois@sgla.co.uk directly.",
-        );
+        setStatus("Sorry, that didn't send. Please try again in a moment.");
       }
     });
   }

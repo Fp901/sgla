@@ -8,7 +8,6 @@ export const organisation = {
   '@id': `${site.url}/#organisation`,
   name: site.name,
   url: site.url,
-  email: site.email,
   description: site.description,
   address: {
     '@type': 'PostalAddress',
