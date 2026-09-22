@@ -1,6 +1,7 @@
 ---
 import { site } from '@data/site';
 import Button from './Button.astro';
+import Logo from './Logo.astro';
 
 const pillars = ['Fast', 'Owned', 'Straightforward'];
 ---
@@ -36,7 +37,7 @@ const pillars = ['Fast', 'Owned', 'Straightforward'];
           <span class="browser__url">sgla.co.uk</span>
         </div>
         <div class="browser__body">
-          <p class="browser__logo">{site.name}</p>
+          <Logo height="1.1rem" class="browser__logo" />
           <ul class="browser__pillars">
             {pillars.map((pillar, index) => (
               <li style={`--i: ${index}`}>
@@ -156,10 +157,8 @@ const pillars = ['Fast', 'Owned', 'Straightforward'];
     gap: clamp(1.5rem, 1rem + 2vw, 2.5rem);
   }
 
-  .browser__logo {
-    font-weight: 700;
-    font-size: 1.25rem;
-    letter-spacing: -0.04em;
+  .browser :global(.browser__logo) {
+    color: var(--color-text);
   }
 
   .browser__pillars {

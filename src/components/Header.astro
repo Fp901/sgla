@@ -1,6 +1,7 @@
 ---
 import { site, navigation } from '@data/site';
 import Button from './Button.astro';
+import Logo from './Logo.astro';
 
 const currentPath = Astro.url.pathname;
 const isCurrent = (href: string) => currentPath === href || currentPath.startsWith(`${href}/`);
@@ -10,7 +11,7 @@ const showCta = !isCurrent(site.cta.href);
 <header class="header">
   <div class="container header__inner">
     <a href="/" class="header__logo" aria-label={`${site.name} home`}>
-      {site.name}
+      <Logo height="1.35rem" />
     </a>
 
     <nav class="header__nav" aria-label="Primary">
@@ -110,11 +111,16 @@ const showCta = !isCurrent(site.cta.href);
   }
 
   .header__logo {
-    font-weight: 700;
-    font-size: 1.25rem;
-    letter-spacing: -0.04em;
-    text-decoration: none;
+    display: flex;
+    align-items: center;
     padding: 0.5rem 0;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color var(--duration-fast) ease;
+  }
+
+  .header__logo:hover {
+    color: var(--color-ink);
   }
 
   .header__list {

@@ -1,6 +1,6 @@
 import type { ImageMetadata } from 'astro';
 import rooibergImage from '@assets/work/rooiberg-wander.png';
-import engelaImage from '@assets/work/engela-health.png';
+import ferryImage from '@assets/work/ferry-cafe.png';
 import commercialTradesImage from '@assets/work/commercial-trades-jobs.png';
 
 export interface Project {
@@ -41,16 +41,16 @@ export const projects: Project[] = [
     technologies: ['Astro', 'Vercel'],
   },
   {
-    slug: 'engela-health',
-    name: 'Engela Health',
-    category: 'Clinical rehabilitation, London',
+    slug: 'ferry-cafe',
+    name: 'The Ferry Café',
+    category: 'Café, Felixstowe Ferry',
     description:
-      'Oncology and cardiac exercise rehabilitation in Marylebone. A calm, credible site for a clinical service, with enquiries going straight to the practitioner.',
-    image: engelaImage,
+      'Fish and chips by the River Deben since 1953. Menu, opening hours and directions, ships no JavaScript at all.',
+    image: ferryImage,
     imageAlt:
-      'The Engela Health homepage, showing runners beside a London lake at sunrise with the headline "The journey starts here".',
-    url: 'https://engelahealth.co.uk',
-    technologies: ['Next.js', 'Cloudflare'],
+      'The Ferry Café homepage, showing the blue timber café building under a bright sky with the headline "The Ferry Café".',
+    url: 'https://theferry.cafe',
+    technologies: ['Astro', 'Tailwind', 'Cloudflare'],
   },
   {
     slug: 'commercial-trades-jobs',

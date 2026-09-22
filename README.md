@@ -61,6 +61,16 @@ public/             favicon, OG image, robots.txt, manifest
 Prices, email, location, nav and CTA copy all live in `src/data/site.ts`. FAQ copy is in
 `src/data/faq.ts`. Change them once and every page updates.
 
+### Logo
+
+The wordmark lives in `src/components/Logo.astro` as SVG outlines (Space Grotesk Bold,
+converted to paths). It is not live text, so the logo needs no second webfont and never
+reflows while one loads. Letters use `currentColor` and the full stop uses `--color-accent`,
+so the mark inverts correctly inside `.theme-dark` without a second asset.
+
+`public/favicon.svg` is the matching square mark, an `S` plus the same stop on a navy tile;
+the `.ico` and PNG icons are generated from it.
+
 ### Colour
 
 The palette is a Tailwind-style 50, 950 ramp generated in OKLCH from the brand navy `#002966`

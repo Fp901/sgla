@@ -1,5 +1,6 @@
 ---
 import { site, navigation } from '@data/site';
+import Logo from './Logo.astro';
 
 const year = new Date().getFullYear();
 ---
@@ -7,8 +8,8 @@ const year = new Date().getFullYear();
 <footer class="footer">
   <div class="container footer__inner">
     <div class="footer__brand">
-      <a href="/" class="footer__logo">
-        {site.name}
+      <a href="/" class="footer__logo" aria-label={`${site.name} home`}>
+        <Logo height="1.6rem" />
       </a>
       <p class="footer__tagline">
         Websites built properly.
@@ -73,11 +74,11 @@ const year = new Date().getFullYear();
   }
 
   .footer__logo {
-    font-weight: 700;
-    font-size: 1.5rem;
-    letter-spacing: -0.04em;
-    text-decoration: none;
+    display: flex;
+    align-items: center;
     justify-self: start;
+    color: var(--color-text);
+    text-decoration: none;
   }
 
   .footer__tagline {
