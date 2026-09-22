@@ -27,7 +27,7 @@ const {
   description,
   canonical,
   image = '/og.png',
-  imageAlt = `${site.name} — ${site.tagline}`,
+  imageAlt = `${site.name}: ${site.tagline}`,
   type = 'website',
   noindex = false,
   structuredData = [],
@@ -68,7 +68,7 @@ const jsonLd = structuredData.map((item) => JSON.stringify(item).replace(/</g, '
 <link rel="icon" href="/favicon.ico" sizes="32x32" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
-<meta name="theme-color" content="#f7f6f2" />
+<meta name="theme-color" content="#002966" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 {jsonLd.map((json) => (

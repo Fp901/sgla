@@ -1,4 +1,4 @@
-# SGLA — sgla.co.uk
+# SGLA (sgla.co.uk)
 
 Marketing website for SGLA. Astro 7, TypeScript, plain CSS, deployed on Vercel.
 
@@ -11,6 +11,7 @@ Marketing website for SGLA. Astro 7, TypeScript, plain CSS, deployed on Vercel.
 | Framework | [Astro](https://astro.build) 7 | Static HTML by default, zero client JS unless a component asks for it |
 | Language | TypeScript (strict) | `astro check` runs against every `.astro` file |
 | Styling | Plain CSS with custom properties | No framework; tokens live in `src/styles/global.css` |
+| Colour | Navy ramp generated from `#002966` | Tailwind-style 50, 950 steps, built in OKLCH so the steps are perceptually even |
 | Fonts | Inter via Astro's Fonts API | Downloaded at build, self-hosted, subset to latin, preloaded |
 | Images | `astro:assets` + sharp | Responsive `srcset`, WebP, dimensions set (no layout shift) |
 | Form email | [Resend](https://resend.com) via `fetch` | No SDK dependency; API key stays server-side |
@@ -24,7 +25,7 @@ which is why `@astrojs/vercel` is installed.
 
 ```bash
 npm install
-cp .env.example .env     # optional — without RESEND_API_KEY, form submissions are logged to the console
+cp .env.example .env     # optional: without RESEND_API_KEY, submissions are logged to the console
 npm run dev              # http://localhost:4321
 ```
 
@@ -50,7 +51,7 @@ src/
 ├── pages/          One file per route + api/contact.ts
 ├── data/           site.ts (business facts, pricing, nav), projects.ts, faq.ts
 ├── lib/            contact.ts (shared validation), structured-data.ts (JSON-LD)
-├── styles/         global.css — design tokens, reset, layout primitives
+├── styles/         global.css, design tokens, reset, layout primitives
 └── assets/work/    Project screenshots (processed by astro:assets)
 public/             favicon, OG image, robots.txt, manifest
 ```
@@ -60,10 +61,21 @@ public/             favicon, OG image, robots.txt, manifest
 Prices, email, location, nav and CTA copy all live in `src/data/site.ts`. FAQ copy is in
 `src/data/faq.ts`. Change them once and every page updates.
 
+### Colour
+
+The palette is a Tailwind-style 50, 950 ramp generated in OKLCH from the brand navy `#002966`
+(which sits at step 900), exposed as `--navy-50` through `--navy-950` in `src/styles/global.css`.
+Semantic tokens (`--color-ink`, `--color-accent`, `--color-surface`, ...) point at those steps, so
+re-anchoring the ramp on a different brand colour re-themes the whole site.
+
+Greys are not neutral: text, muted text, borders and surfaces all carry a little of the navy hue
+so they read as one family. Every text/background pair on every page was measured at WCAG AA or
+better.
+
 ### Adding a project
 
 1. Put a screenshot in `src/assets/work/` (1600×1000 works well).
-2. Import it in `src/data/projects.ts` and add an entry. Only real, launched work — no invented case studies.
+2. Import it in `src/data/projects.ts` and add an entry. Only real, launched work, no invented case studies.
 3. The homepage shows the first three; `/work` shows all.
 
 ## Environment variables

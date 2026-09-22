@@ -5,23 +5,43 @@
    ========================================================================== */
 
 :root {
-  /* Colour */
+  /* --------------------------------------------------------------------
+     Navy palette, generated in OKLCH from the brand colour #002966 (900).
+     Tailwind-style 50–950 steps so future client work can reuse the ramp.
+     -------------------------------------------------------------------- */
+  --navy-50: #eff8ff;
+  --navy-100: #deeeff;
+  --navy-200: #c2deff;
+  --navy-300: #9ec6ff;
+  --navy-400: #72a3f1;
+  --navy-500: #4d82d5;
+  --navy-600: #3366b5;
+  --navy-700: #224f95;
+  --navy-800: #163f7d;
+  --navy-900: #002966;
+  --navy-950: #011942;
+
+  /* Semantic colour. Neutrals carry a little of the navy hue so greys,
+     borders and text read as one family rather than as grey-on-blue. */
   --color-bg: #f7f6f2;
-  --color-surface: #ecebe6;
-  --color-ink: #111111;
-  --color-text: #171717;
-  --color-muted: #686868;
-  --color-accent: #315cff;
-  --color-accent-strong: #1f44d6;
-  --color-border: rgb(17 17 17 / 0.12);
-  --color-border-strong: rgb(17 17 17 / 0.28);
+  --color-surface: #e8eef7;
+  --color-ink: var(--navy-900);
+  --color-text: #1c2532;
+  --color-muted: #606b7c;
+  --color-accent: var(--navy-600);
+  --color-accent-strong: var(--navy-700);
+  --color-border: rgb(0 41 102 / 0.14);
+  --color-border-strong: rgb(0 41 102 / 0.32);
   --color-error: #b3261e;
   --color-success: #1d6b3a;
 
   /* Inverse palette, applied on dark sections via .theme-dark */
-  --color-on-ink: #f7f6f2;
-  --color-on-ink-muted: rgb(247 246 242 / 0.62);
-  --color-on-ink-border: rgb(247 246 242 / 0.16);
+  --color-on-ink: #f1f6fe;
+  --color-on-ink-muted: rgb(241 246 254 / 0.68);
+  --color-on-ink-border: rgb(241 246 254 / 0.18);
+
+  /* Shadow tint, so elevation picks up the navy rather than going grey */
+  --shadow-color: 0 41 102;
 
   /* Typography */
   --font-sans: var(--font-inter), system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -67,7 +87,7 @@
 
   /* Misc */
   --header-height: 4.5rem;
-  --focus-ring: 0 0 0 3px var(--color-bg), 0 0 0 6px var(--color-accent);
+  --focus-ring: 0 0 0 3px var(--color-bg), 0 0 0 6px var(--color-accent-strong);
 }
 
 /* ---------- Reset / base ---------- */
@@ -189,22 +209,23 @@ a:hover {
 }
 
 ::selection {
-  background: var(--color-accent);
-  color: #fff;
+  background: var(--navy-200);
+  color: var(--navy-950);
 }
 
 /* ---------- Dark sections ---------- */
 
 .theme-dark {
-  --color-bg: var(--color-ink);
-  --color-surface: #1c1c1c;
+  --color-bg: var(--navy-950);
+  --color-surface: #17263d;
   --color-text: var(--color-on-ink);
   --color-muted: var(--color-on-ink-muted);
   --color-border: var(--color-on-ink-border);
-  --color-border-strong: rgb(247 246 242 / 0.4);
-  --color-accent: #6b8bff;
-  --color-accent-strong: #8aa3ff;
-  --focus-ring: 0 0 0 3px var(--color-ink), 0 0 0 6px var(--color-accent);
+  --color-border-strong: rgb(241 246 254 / 0.42);
+  /* Lighter steps of the same ramp, for contrast against the navy ground. */
+  --color-accent: var(--navy-300);
+  --color-accent-strong: var(--navy-200);
+  --focus-ring: 0 0 0 3px var(--navy-950), 0 0 0 6px var(--color-accent);
   background: var(--color-bg);
   color: var(--color-text);
 }

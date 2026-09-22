@@ -1,5 +1,6 @@
 import type { ImageMetadata } from 'astro';
-import sglaImage from '@assets/work/sgla.png';
+import rooibergImage from '@assets/work/rooiberg-wander.png';
+import engelaImage from '@assets/work/engela-health.png';
 
 export interface Project {
   /** URL-safe identifier, used for anchors. */
@@ -27,16 +28,28 @@ export interface Project {
  */
 export const projects: Project[] = [
   {
-    slug: 'sgla',
-    name: 'SGLA',
-    category: 'Independent web development',
+    slug: 'rooiberg-wander',
+    name: 'Rooiberg Wander',
+    category: 'Walking safari, Limpopo',
     description:
-      'This site. Static-first, no client framework, self-hosted fonts, one serverless function for the form.',
-    image: sglaImage,
+      'A three-day guided walking safari in the Waterberg. Booking-led site built to load fast over patchy rural connections and to sell the trail on photography.',
+    image: rooibergImage,
     imageAlt:
-      'The SGLA homepage on a desktop browser, showing the headline "Websites built properly. Without the agency."',
-    url: 'https://sgla.co.uk',
-    technologies: ['Astro', 'TypeScript', 'Vercel'],
+      'The Rooiberg Wander homepage, showing a sunset over the Waterberg with the headline "Three Days. The Big Five. On Foot."',
+    url: 'https://rooibergwander.com',
+    technologies: ['Astro', 'Vercel'],
+  },
+  {
+    slug: 'engela-health',
+    name: 'Engela Health',
+    category: 'Clinical rehabilitation, London',
+    description:
+      'Oncology and cardiac exercise rehabilitation in Marylebone. A calm, credible site for a clinical service, with enquiries going straight to the practitioner.',
+    image: engelaImage,
+    imageAlt:
+      'The Engela Health homepage, showing runners beside a London lake at sunrise with the headline "The journey starts here".',
+    url: 'https://engelahealth.co.uk',
+    technologies: ['Next.js', 'Cloudflare'],
   },
 ];
 

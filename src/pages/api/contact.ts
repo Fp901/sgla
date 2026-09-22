@@ -65,7 +65,7 @@ async function sendEmail(values: ContactPayload): Promise<void> {
 
   if (!RESEND_API_KEY) {
     if (import.meta.env.DEV) {
-      console.info('[contact] RESEND_API_KEY not set — submission logged instead:\n' + text);
+      console.info('[contact] RESEND_API_KEY not set, submission logged instead:\n' + text);
       return;
     }
     throw new Error('RESEND_API_KEY is not configured');
@@ -133,7 +133,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     console.error('[contact] send failed:', error);
     return wantsJson
       ? json({ ok: false, message: 'Could not send your message.' }, 502)
-      : new Response('Sorry — that didn’t send. Please email francois@sgla.co.uk directly.', {
+      : new Response('Sorry, that didn’t send. Please email francois@sgla.co.uk directly.', {
           status: 502,
         });
   }

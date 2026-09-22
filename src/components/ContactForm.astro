@@ -94,7 +94,7 @@ interface Props {
 </form>
 
 <div class="contact-form__success" data-contact-success hidden tabindex="-1">
-  <h2>Thanks — I'll take a look and get back to you.</h2>
+  <h2>Thanks. I'll take a look and get back to you.</h2>
   <p class="muted">Usually within a working day or two.</p>
 </div>
 
@@ -205,7 +205,7 @@ interface Props {
       } catch {
         setBusy(false);
         setStatus(
-          "Sorry — that didn't send. Please try again, or email francois@sgla.co.uk directly.",
+          "Sorry, that didn't send. Please try again, or email francois@sgla.co.uk directly.",
         );
       }
     });
@@ -245,7 +245,7 @@ interface Props {
   }
 
   .field input::placeholder {
-    color: rgb(104 104 104 / 0.6);
+    color: color-mix(in srgb, var(--color-muted) 65%, transparent);
   }
 
   .field input:hover,
@@ -256,7 +256,7 @@ interface Props {
   .field input:focus-visible,
   .field textarea:focus-visible {
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgb(49 92 255 / 0.2);
+    box-shadow: 0 0 0 3px rgb(var(--shadow-color) / 0.18);
   }
 
   .field [aria-invalid='true'] {

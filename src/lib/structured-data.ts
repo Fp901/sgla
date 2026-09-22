@@ -1,7 +1,7 @@
 import { site } from '@data/site';
 import type { FaqItem } from '@data/faq';
 
-/** Organisation record. Factual only — no ratings, reviews or awards. */
+/** Organisation record. Factual only: no ratings, reviews or awards. */
 export const organisation = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
