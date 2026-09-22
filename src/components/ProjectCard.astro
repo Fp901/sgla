@@ -16,50 +16,52 @@ const isExternal = project.url?.startsWith('http');
 ---
 
 <article class="project" id={`project-${project.slug}`}>
-  <div class="project__media">
-    <Image
-      src={project.image}
-      alt={project.imageAlt}
-      widths={[480, 800, 1200, 1600]}
-      sizes="(min-width: 64em) 600px, (min-width: 48em) 50vw, 100vw"
-      loading={loading}
-      decoding="async"
-      format="webp"
-      quality={80}
-    />
-  </div>
-  <div class="project__body">
-    <div class="project__meta">
-      <Heading class="project__name">
-        {project.url ? (
-          <a
-            href={project.url}
-            class="project__link"
-            target={isExternal ? '_blank' : undefined}
-            rel={isExternal ? 'noopener' : undefined}
-          >
-            {project.name}
-          </a>
-        ) : (
-          project.name
-        )}
-      </Heading>
-      <p class="project__category">{project.category}</p>
+  <div class="project__layout">
+    <div class="project__media">
+      <Image
+        src={project.image}
+        alt={project.imageAlt}
+        widths={[480, 800, 1200, 1600]}
+        sizes="(min-width: 64em) 600px, (min-width: 48em) 50vw, 100vw"
+        loading={loading}
+        decoding="async"
+        format="webp"
+        quality={80}
+      />
     </div>
-    <p class="project__description muted">{project.description}</p>
-    <div class="project__footer">
-      {project.technologies && (
-        <ul class="project__tags" aria-label="Built with">
-          {project.technologies.map((tech) => (
-            <li>{tech}</li>
-          ))}
-        </ul>
-      )}
-      {project.url && (
-        <span class="project__cta" aria-hidden="true">
-          View project <span class="project__arrow">→</span>
-        </span>
-      )}
+    <div class="project__body">
+      <div class="project__meta">
+        <Heading class="project__name">
+          {project.url ? (
+            <a
+              href={project.url}
+              class="project__link"
+              target={isExternal ? '_blank' : undefined}
+              rel={isExternal ? 'noopener' : undefined}
+            >
+              {project.name}
+            </a>
+          ) : (
+            project.name
+          )}
+        </Heading>
+        <p class="project__category">{project.category}</p>
+      </div>
+      <p class="project__description muted">{project.description}</p>
+      <div class="project__footer">
+        {project.technologies && (
+          <ul class="project__tags" aria-label="Built with">
+            {project.technologies.map((tech) => (
+              <li>{tech}</li>
+            ))}
+          </ul>
+        )}
+        {project.url && (
+          <span class="project__cta" aria-hidden="true">
+            View project <span class="project__arrow">→</span>
+          </span>
+        )}
+      </div>
     </div>
   </div>
 </article>
@@ -67,9 +69,26 @@ const isExternal = project.url?.startsWith('http');
 <style>
   .project {
     position: relative;
+    container-type: inline-size;
+  }
+
+  .project__layout {
     display: grid;
     gap: var(--space-md);
     align-content: start;
+  }
+
+  /* Only a card spanning the full row is this wide; two-up cards stay stacked. */
+  @container (min-width: 54rem) {
+    .project__layout {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      align-items: center;
+      gap: var(--grid-gap);
+    }
+
+    .project__body {
+      gap: var(--space-md);
+    }
   }
 
   .project__media {

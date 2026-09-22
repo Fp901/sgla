@@ -1,6 +1,7 @@
 import type { ImageMetadata } from 'astro';
 import rooibergImage from '@assets/work/rooiberg-wander.png';
 import engelaImage from '@assets/work/engela-health.png';
+import commercialTradesImage from '@assets/work/commercial-trades-jobs.png';
 
 export interface Project {
   /** URL-safe identifier, used for anchors. */
@@ -50,6 +51,18 @@ export const projects: Project[] = [
       'The Engela Health homepage, showing runners beside a London lake at sunrise with the headline "The journey starts here".',
     url: 'https://engelahealth.co.uk',
     technologies: ['Next.js', 'Cloudflare'],
+  },
+  {
+    slug: 'commercial-trades-jobs',
+    name: 'Commercial Trades Jobs',
+    category: 'Job board, UK',
+    description:
+      'A specialist job board for commercial FM engineers. Search, filtering, job alerts and employer listings, rather than a brochure site with a contact form.',
+    image: commercialTradesImage,
+    imageAlt:
+      'The Commercial Trades Jobs homepage, showing the headline "UK Commercial FM Engineering Jobs" above a job search form.',
+    url: 'https://commercialtradesjobs.co.uk',
+    technologies: ['Next.js', 'Tailwind', 'Cloudflare'],
   },
 ];
 

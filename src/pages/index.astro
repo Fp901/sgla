@@ -36,7 +36,7 @@ import { organisation, website, faqPage } from '@lib/structured-data';
         <SectionHeading id="work-title" eyebrow="Selected work">
           A few things I've built.
         </SectionHeading>
-        <div class="work__grid">
+        <div class="work-grid">
           {featuredProjects.map((project) => (
             <ProjectCard project={project} />
           ))}
@@ -59,23 +59,7 @@ import { organisation, website, faqPage } from '@lib/structured-data';
 </BaseLayout>
 
 <style>
-  .work__grid {
-    display: grid;
-    gap: var(--space-xl) var(--grid-gap);
-  }
-
   .work__more {
     margin-top: var(--space-xl);
-  }
-
-  @media (min-width: 48em) {
-    .work__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    /* A lone project gets more room rather than an empty column. */
-    .work__grid:has(> :only-child) {
-      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
-    }
   }
 </style>

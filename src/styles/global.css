@@ -282,6 +282,30 @@ a:hover {
   text-decoration-color: currentColor;
 }
 
+/* ---------- Work grid ---------- */
+
+/* Shared by the homepage and /work. Adapts to however many projects exist:
+   a lone project gets a wider card, and an odd last one spans the final row
+   instead of sitting next to an empty column. */
+.work-grid {
+  display: grid;
+  gap: var(--space-xl) var(--grid-gap);
+}
+
+@media (min-width: 48em) {
+  .work-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .work-grid:has(> :only-child) {
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+  }
+
+  .work-grid > :last-child:nth-child(odd):not(:only-child) {
+    grid-column: span 2;
+  }
+}
+
 /* ---------- Text utilities (kept deliberately small) ---------- */
 
 .eyebrow {
