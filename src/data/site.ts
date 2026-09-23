@@ -11,6 +11,10 @@ export const site = {
    */
   email: 'francois@sgla.co.uk',
   location: 'Bury St Edmunds, Suffolk',
+  /** Analytics. The GA4 measurement id is public: it appears in the page source. */
+  analytics: {
+    googleTagId: 'G-YVVP3YG0WX',
+  },
   /** Public profiles, used for structured data (sameAs) entity linking. */
   profiles: {
     linkedin: 'https://www.linkedin.com/in/francois--pretorius',

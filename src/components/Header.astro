@@ -84,10 +84,13 @@ const showCta = !isCurrent(site.cta.href);
     });
   }
 
-  // Lightweight analytics for primary CTAs (no-op if analytics isn't loaded).
+  // Primary CTA clicks. Both calls are no-ops if that analytics script has not loaded.
   document.addEventListener('click', (event) => {
     const el = (event.target as HTMLElement).closest<HTMLElement>('[data-event]');
-    if (el?.dataset.event) window.va?.('event', { name: el.dataset.event });
+    const name = el?.dataset.event;
+    if (!name) return;
+    window.va?.('event', { name });
+    window.gtag?.('event', name, { event_category: 'cta' });
   });
 </script>
 

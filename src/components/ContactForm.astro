@@ -189,6 +189,7 @@ interface Props {
           success.hidden = false;
           success.focus();
           window.va?.('event', { name: 'contact_success' });
+          window.gtag?.('event', 'generate_lead', { event_category: 'contact' });
           return;
         }
 
