@@ -89,12 +89,10 @@ const pillars = ['Fast', 'Owned', 'Straightforward'];
   }
 
   .hero__title {
-    /* Smaller than the global h1: this headline is nine words, not five,
-               so the display scale would otherwise fill the viewport. */
+    /* Smaller than the global h1: this headline is nine words, not five. */
     font-size: clamp(2.125rem, 1.3rem + 3.5vw, 4.5rem);
     max-width: 13em;
-    /* The question is the hook, so it keeps full contrast; the statement
-               before it steps back. */
+    /* The question is the hook, so the statement before it steps back. */
     color: var(--color-muted);
   }
 
@@ -116,8 +114,7 @@ const pillars = ['Fast', 'Owned', 'Straightforward'];
     color: var(--color-muted);
   }
 
-  /* Separators only where the line will not wrap; a wrapped line would
-     otherwise start with a stray dot. */
+  /* Separators only where the line will not wrap. */
   @media (min-width: 30em) {
     .hero__terms span + span::before {
       content: '·';
