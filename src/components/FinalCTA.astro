@@ -9,11 +9,12 @@ import Button from './Button.astro';
       Is your current website still doing the job?
     </h2>
     <p class="final-cta__lede lede">
-      Send it over. I'll take a look and tell you whether I'd rebuild it.
+      Send it over. I'll tell you what I'd keep, what I'd change and what I'd rebuild.
     </p>
+    <p class="final-cta__reassure">If I don't think a rebuild is worth doing, I'll tell you.</p>
     <div class="final-cta__actions">
       <Button href={site.cta.href} size="lg" event="cta_final">
-        {site.cta.label}
+        Send me my website review
       </Button>
     </div>
   </div>
@@ -34,6 +35,12 @@ import Button from './Button.astro';
     max-width: 12em;
     font-size: var(--text-h1);
     font-size: clamp(2.5rem, 1.5rem + 4.5vw, 5.5rem);
+  }
+
+  .final-cta__reassure {
+    font-weight: 600;
+    letter-spacing: var(--tracking-snug);
+    max-width: 26em;
   }
 
   .final-cta__actions {

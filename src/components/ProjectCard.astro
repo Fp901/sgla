@@ -48,6 +48,22 @@ const isExternal = project.url?.startsWith('http');
         <p class="project__category">{project.category}</p>
       </div>
       <p class="project__description muted">{project.description}</p>
+      {(project.challenge || project.rebuild) && (
+        <dl class="project__detail">
+          {project.challenge && (
+            <>
+              <dt>The challenge</dt>
+              <dd>{project.challenge}</dd>
+            </>
+          )}
+          {project.rebuild && (
+            <>
+              <dt>The rebuild</dt>
+              <dd>{project.rebuild}</dd>
+            </>
+          )}
+        </dl>
+      )}
       <div class="project__footer">
         {project.technologies && (
           <ul class="project__tags" aria-label="Built with">
@@ -156,6 +172,33 @@ const isExternal = project.url?.startsWith('http');
 
   .project__description {
     max-width: 44em;
+  }
+
+  .project__detail {
+    display: grid;
+    gap: var(--space-2xs);
+    margin: var(--space-2xs) 0 0;
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+  }
+
+  .project__detail dt {
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+  }
+
+  .project__detail dd {
+    margin: 0 0 var(--space-xs);
+    color: var(--color-muted);
+    max-width: 46em;
+  }
+
+  .project__detail dd:last-child {
+    margin-bottom: 0;
   }
 
   .project__footer {

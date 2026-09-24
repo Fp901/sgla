@@ -10,6 +10,7 @@ import OwnershipSection from '@components/OwnershipSection.astro';
 import Process from '@components/Process.astro';
 import PricingCard from '@components/PricingCard.astro';
 import CarePlan from '@components/CarePlan.astro';
+import FounderSection from '@components/FounderSection.astro';
 import FAQ from '@components/FAQ.astro';
 import FinalCTA from '@components/FinalCTA.astro';
 import Button from '@components/Button.astro';
@@ -21,7 +22,7 @@ import { organisation, website, faqPage } from '@lib/structured-data';
 
 <BaseLayout
   title={`${site.name} | Websites Built Properly. Without the Agency.`}
-  description={site.description}
+  description="SGLA rebuilds outdated, slow or restrictive websites for independent businesses. Fast, modern websites that you actually own."
   canonical="/"
   structuredData={[organisation, website, faqPage(faq)]}
 >
@@ -51,6 +52,7 @@ import { organisation, website, faqPage } from '@lib/structured-data';
   )}
 
   <OwnershipSection />
+  <FounderSection />
   <Process />
   <PricingCard />
   <CarePlan />

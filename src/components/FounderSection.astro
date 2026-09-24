@@ -1,0 +1,83 @@
+---
+/**
+ * Founder credibility on the homepage. The restaurant years are the most
+ * commercially useful fact about François for this audience: it says he has
+ * been the client, not just the supplier.
+ */
+import { site } from '@data/site';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section class="section founder" aria-labelledby="founder-title">
+  <div class="container founder__inner">
+    <div class="founder__copy">
+      <SectionHeading id="founder-title" eyebrow="Why SGLA">
+        I've been the client too.
+        <Fragment slot="lede">
+          <p>Before SGLA, I spent six years building and running my own restaurant.</p>
+          <p>
+            So I know what it's like to have your name on the business, and I know that a website
+            isn't a technology project for the sake of technology. It needs to work for the business
+            behind it.
+          </p>
+          <p>That's why SGLA keeps things simple: one person, one project, one clear outcome.</p>
+        </Fragment>
+      </SectionHeading>
+    </div>
+
+    <aside class="founder__local">
+      <p class="founder__local-lead">
+        Based in {site.location}. Working with independent businesses across Suffolk and the UK.
+      </p>
+      <p class="muted">You deal directly with the person designing and building your website.</p>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .founder {
+    padding-top: 0;
+  }
+
+  .founder__inner {
+    display: grid;
+    gap: var(--space-lg) var(--grid-gap);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .founder__copy {
+    grid-column: span 12;
+  }
+
+  .founder__copy :global(.section-heading) {
+    margin-bottom: 0;
+  }
+
+  .founder__local {
+    grid-column: span 12;
+    display: grid;
+    gap: var(--space-xs);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    font-size: var(--text-sm);
+  }
+
+  .founder__local-lead {
+    font-weight: 600;
+    font-size: var(--text-base);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  @media (min-width: 64em) {
+    .founder__copy {
+      grid-column: span 7;
+    }
+
+    .founder__local {
+      grid-column: 9 / span 4;
+    }
+  }
+</style>

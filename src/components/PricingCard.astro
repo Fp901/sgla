@@ -47,6 +47,11 @@ const { standard, larger } = pricing;
       <Button href={site.cta.href} size="lg" event="cta_pricing" class="price-card__cta">
         Start with your website
       </Button>
+
+      <p class="price-card__note">
+        <strong>No monthly website subscription required.</strong> You own the website, so it
+        doesn't stop working if you stop paying SGLA.
+      </p>
     </div>
   </div>
 </section>
@@ -116,6 +121,18 @@ const { standard, larger } = pricing;
     flex: none;
     margin-top: 0.45em;
     color: var(--color-accent);
+  }
+
+  .price-card__note {
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    max-width: 40em;
+  }
+
+  .price-card__note strong {
+    color: var(--color-text);
   }
 
   .price-card__timeline {

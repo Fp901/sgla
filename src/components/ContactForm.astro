@@ -80,6 +80,10 @@ interface Props {
   </div>
   <input type="hidden" name="ts" value="" data-ts />
 
+  <p class="contact-form__promise">
+    No pitch deck. No sales funnel. I'll look at the site and give you a straight answer.
+  </p>
+
   <div class="contact-form__actions">
     <Button type="submit" size="lg" event="contact_submit" class="contact-form__submit">
       Show me what you'd change
@@ -273,6 +277,11 @@ interface Props {
     width: 1px;
     height: 1px;
     overflow: hidden;
+  }
+
+  .contact-form__promise {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
   }
 
   .contact-form__actions {

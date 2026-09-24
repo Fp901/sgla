@@ -4,7 +4,7 @@ import { projects } from '@data/projects';
 import { faq } from '@data/faq';
 
 /**
- * /llms.txt — a plain-text summary for language models, following the
+ * /llms.txt: a plain-text summary for language models, following the
  * llmstxt.org convention. Generated from the same data files as the pages,
  * so it cannot drift out of date.
  *
@@ -45,7 +45,15 @@ export const GET: APIRoute = () => {
     '',
     '## Selected work',
     '',
-    ...projects.map((p) => `- ${p.name} (${p.category}): ${p.description} ${p.url ?? ''}`.trim()),
+    ...projects.flatMap((p) => [
+      `### ${p.name}`,
+      '',
+      `${p.category}. ${p.description}`,
+      ...(p.challenge ? [`The challenge: ${p.challenge}`] : []),
+      ...(p.rebuild ? [`The rebuild: ${p.rebuild}`] : []),
+      ...(p.url ? [p.url] : []),
+      '',
+    ]),
     '',
     '## Pages',
     '',

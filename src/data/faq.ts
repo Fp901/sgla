@@ -18,7 +18,7 @@ export const faq: FaqItem[] = [
     answer: 'Yes. The normal process is to rebuild it rather than patching an old platform.',
   },
   {
-    question: 'How much does a website cost?',
+    question: 'How much does it cost?',
     answer: 'The standard SGLA website is £1,795 for 5–8 pages. Larger projects start from £2,495.',
   },
   {
@@ -29,6 +29,11 @@ export const faq: FaqItem[] = [
     question: 'Do you provide hosting?',
     answer:
       'The website can be deployed to hosting under your ownership. SGLA can manage the technical side if you want.',
+  },
+  {
+    question: 'What happens if I stop working with SGLA?',
+    answer:
+      'Your website keeps working. You own the code, domain and hosting, so you can carry on using it as it is or have another developer pick it up.',
   },
   {
     question: 'What if I need changes later?',

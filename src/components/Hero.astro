@@ -11,11 +11,11 @@ const pillars = ['Fast', 'Owned', 'Straightforward'];
     <div class="hero__copy">
       <p class="eyebrow">Independent web development</p>
       <h1 id="hero-title" class="hero__title">
-        Websites built properly. <span class="hero__title-accent">Without the agency.</span>
+        Your business has moved on.<span class="hero__title-accent"> Has your website?</span>
       </h1>
       <p class="hero__lede lede">
-        Fast, modern websites for independent businesses, replacing outdated or restrictive sites
-        with something you actually own.
+        SGLA rebuilds outdated, slow or restrictive websites for independent businesses, giving you
+        a faster, better-looking website that you actually own.
       </p>
       <div class="hero__actions">
         <Button href={site.cta.href} size="lg" event="cta_hero">
@@ -25,6 +25,12 @@ const pillars = ['Fast', 'Owned', 'Straightforward'];
           See how it works
         </Button>
       </div>
+      <p class="hero__terms">
+        <span>Fixed price</span>
+        <span>5&ndash;8 pages</span>
+        <span>Typically 2&ndash;3 weeks</span>
+      </p>
+      <p class="hero__brand">Websites built properly. Without the agency.</p>
     </div>
 
     <div class="hero__visual" aria-hidden="true">
@@ -73,20 +79,60 @@ const pillars = ['Fast', 'Owned', 'Straightforward'];
   .hero__copy {
     grid-column: span 12;
     display: grid;
-    gap: var(--space-lg);
+    gap: var(--space-md);
     justify-items: start;
   }
 
+  .hero__lede,
+  .hero__actions {
+    margin-top: var(--space-xs);
+  }
+
   .hero__title {
-    max-width: 10.5em;
+    /* Smaller than the global h1: this headline is nine words, not five,
+               so the display scale would otherwise fill the viewport. */
+    font-size: clamp(2.125rem, 1.3rem + 3.5vw, 4.5rem);
+    max-width: 13em;
+    /* The question is the hook, so it keeps full contrast; the statement
+               before it steps back. */
+    color: var(--color-muted);
   }
 
   .hero__title-accent {
-    color: var(--color-muted);
+    color: var(--color-text);
   }
 
   .hero__lede {
     max-width: 30em;
+  }
+
+  .hero__terms {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.9rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-muted);
+  }
+
+  /* Separators only where the line will not wrap; a wrapped line would
+     otherwise start with a stray dot. */
+  @media (min-width: 30em) {
+    .hero__terms span + span::before {
+      content: '·';
+      margin-right: 0.9rem;
+      color: var(--color-border-strong);
+    }
+  }
+
+  .hero__brand {
+    margin-top: var(--space-xs);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    font-weight: 600;
+    letter-spacing: var(--tracking-snug);
+    max-width: 22em;
   }
 
   .hero__actions {

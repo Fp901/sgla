@@ -1,29 +1,34 @@
 ---
 import SectionHeading from './SectionHeading.astro';
+import Button from './Button.astro';
+import { site } from '@data/site';
 
 const problems = [
-  { title: 'Looks dated', text: "Your business has moved on. Your website hasn't." },
-  { title: 'Feels slow', text: "People shouldn't have to wait for your website to load." },
   {
-    title: "Doesn't belong to you",
-    text: "You're tied to a platform or system you don't really control.",
+    title: 'Looks behind',
+    text: "Your business has moved forward. Your website still looks like it hasn't.",
+  },
+  {
+    title: 'Feels slow',
+    text: "Customers shouldn't have to wait for your website to load or fight through clutter to find what they need.",
+  },
+  {
+    title: 'Feels restrictive',
+    text: "You shouldn't have to work around a platform just to make a simple change.",
   },
 ];
 ---
 
 <section class="section problem" aria-labelledby="problem-title">
   <div class="container">
-    <SectionHeading id="problem-title" eyebrow="The problem" narrow>
-      Your website shouldn't hold your business back.
+    <SectionHeading id="problem-title" eyebrow="Your website" narrow>
+      It might be doing the job. But is it doing your business justice?
       <Fragment slot="lede">
+        <p>Your business changes. Your services improve. Your reputation grows.</p>
+        <p>But the website often gets left behind.</p>
         <p>
-          A lot of independent businesses don't need a bigger agency. They just need a better
-          website.
-        </p>
-        <p>
-          If your current site is slow, dated, difficult to update or simply doesn't reflect the
-          quality of your business, rebuilding it properly can make more sense than endlessly
-          patching it.
+          A site that once seemed perfectly fine can become slow, dated, awkward on mobile or simply
+          no longer representative of the business behind it.
         </p>
       </Fragment>
     </SectionHeading>
@@ -39,6 +44,15 @@ const problems = [
         </li>
       ))}
     </ul>
+
+    <div class="problem__close">
+      <p class="problem__close-text">
+        That's usually when a rebuild makes more sense than another round of patches.
+      </p>
+      <Button href={site.cta.href} variant="secondary" event="cta_problem">
+        Show me what you'd change
+      </Button>
+    </div>
   </div>
 </section>
 
@@ -58,6 +72,22 @@ const problems = [
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     background: var(--color-surface);
+  }
+
+  .problem__close {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md) var(--space-lg);
+    margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+
+  .problem__close-text {
+    max-width: 22em;
+    font-size: var(--text-xl);
+    font-weight: 600;
+    letter-spacing: var(--tracking-snug);
+    line-height: 1.3;
   }
 
   .problem__index {
